@@ -3,7 +3,7 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-!**/src/main/resources/local.properties
+/src/main/resources/local.properties
 
 ### Eclipse/STS ###
 .apt_generated
