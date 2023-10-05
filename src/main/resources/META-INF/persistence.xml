@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+  <persistence-unit name="svc.dynamic.form_svc-dynamic-form-spring_war_0.0.1PU" transaction-type="RESOURCE_LOCAL">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>svc.dynamic.form.project.Entity.PublicationGeneralType</class>
+    <class>svc.dynamic.form.project.Entity.PublicationType</class>
+    <class>svc.dynamic.form.project.Entity.PublicationStatus</class>
+    <class>svc.dynamic.form.project.Entity.PublicationMeta</class>
+    <class>svc.dynamic.form.project.Entity.Try01</class>
+    <class>svc.dynamic.form.project.Entity.TemporaryFileUpload</class>
+    <class>svc.dynamic.form.project.Entity.Publication</class>
+    <class>svc.dynamic.form.project.Entity.PublicationForm</class>
+    <class>svc.dynamic.form.project.Entity.PublicationFormVersion</class>
+    <exclude-unlisted-classes>false</exclude-unlisted-classes>
+    <properties>
+      <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/app_dynamic_form?zeroDateTimeBehavior=CONVERT_TO_NULL"/>
+      <property name="jakarta.persistence.jdbc.user" value="root"/>
+      <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+      <property name="jakarta.persistence.jdbc.password" value=""/>
+    </properties>
+  </persistence-unit>
+</persistence>
