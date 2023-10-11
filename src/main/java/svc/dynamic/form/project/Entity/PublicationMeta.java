@@ -2,8 +2,12 @@ package svc.dynamic.form.project.Entity;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.hibernate.annotations.Type;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.hypersistence.utils.hibernate.type.json.JsonStringType;
 import jakarta.persistence.Column;
@@ -21,6 +25,7 @@ import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.persistence.Transient;
 
 /**
  *
@@ -58,7 +63,6 @@ public class PublicationMeta implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(nullable = false)
 	private Long id;
 
@@ -98,7 +102,7 @@ public class PublicationMeta implements Serializable {
 	@Lob
     @Column(name = "field_configs", columnDefinition = "LONGTEXT")
 	@Type(JsonStringType.class)
-	private String fieldConfigs;
+	private Map<String, Object> fieldConfigs;
 
 	private String description;
 
@@ -115,12 +119,12 @@ public class PublicationMeta implements Serializable {
 	@Lob
 	@Column(name = "dependency_child", columnDefinition = "LONGTEXT")
 	@Type(JsonStringType.class)
-	private String dependencyChild;
+	private Map<String, Object> dependencyChild;
 
 	@Lob
 	@Column(name = "dependency_parent", columnDefinition = "LONGTEXT")
 	@Type(JsonStringType.class)
-	private String dependencyParent;
+	private Map<String, Object> dependencyParent;
 
 	@Column(name = "flag_required", nullable = false, columnDefinition = "TINYINT default 1")
 	private boolean flagRequired;
@@ -140,23 +144,28 @@ public class PublicationMeta implements Serializable {
 	@Lob
 	@Column(name = "other_value", columnDefinition = "LONGTEXT")
 	@Type(JsonStringType.class)
-	private String otherValue;
+	private HashMap<String, Object> otherValue;
 
 	@Column(name = "flag_active", nullable = false, columnDefinition = "TINYINT default 1")
+    @JsonIgnore
 	private boolean flagActive;
 
 	@Column(name = "create_user", nullable = false, columnDefinition = "VARCHAR(50) default 'systems'")
+    @JsonIgnore
 	private String createUser;
 
 	@Column(name = "created_at", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
+    @JsonIgnore
 	private LocalDateTime createdAt;
 
 	@Column(name = "update_user", nullable = false, columnDefinition = "VARCHAR(50) default 'systems'")
+    @JsonIgnore
 	private String updateUser;
 
 	@Column(name = "updated_at", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
+    @JsonIgnore
 	private LocalDateTime updatedAt;
 
 	@Column(length = 36, nullable = false, columnDefinition = "CHAR(36)")
@@ -170,8 +179,8 @@ public class PublicationMeta implements Serializable {
 	@JoinColumn(name = "id_publication", referencedColumnName = "id")
 	private Publication publication;
 
-	@JoinColumn(name = "id_form", referencedColumnName = "id")
 	@ManyToOne(optional = false)
+	@JoinColumn(name = "id_form", referencedColumnName = "id")
 	private PublicationForm form;
 
 	public PublicationMeta() {
@@ -183,10 +192,10 @@ public class PublicationMeta implements Serializable {
 
 	public PublicationMeta(Long id, Long idForm, Long idPublication, Long idFormVersion, Long idFormParent,
 			String fieldLabel, String fieldType, String fieldName, String fieldId, String fieldClass,
-			String fieldPlaceholder, String fieldOptions, String fieldConfigs, String description,
-			Integer orderPosition, String validationConfigs, String errorMessage, String dependencyChild,
-			String dependencyParent, boolean flagRequired, boolean flagFieldFormType, boolean flagFieldTitle,
-			boolean flagFieldPublishDate, String value, String otherValue, boolean flagActive, String createUser,
+			String fieldPlaceholder, String fieldOptions, HashMap fieldConfigs, String description,
+			Integer orderPosition, String validationConfigs, String errorMessage, HashMap dependencyChild,
+			HashMap dependencyParent, boolean flagRequired, boolean flagFieldFormType, boolean flagFieldTitle,
+			boolean flagFieldPublishDate, String value, HashMap otherValue, boolean flagActive, String createUser,
 			LocalDateTime createdAt, String updateUser, LocalDateTime updatedAt, String uuid) {
 		this.id = id;
 		this.idForm = idForm;
@@ -224,12 +233,15 @@ public class PublicationMeta implements Serializable {
     @PrePersist
     public void onPrePersist() {
         this.setCreatedAt(LocalDateTime.now());
+        this.setCreateUser("system");
         this.setUpdatedAt(LocalDateTime.now());
+        this.setUpdateUser("system");
     }
 
     @PreUpdate
     public void onPreUpdate() {
         this.setUpdatedAt(LocalDateTime.now());
+        this.setUpdateUser("system");
     }
 
 	public Long getId() {
@@ -328,11 +340,11 @@ public class PublicationMeta implements Serializable {
 		this.fieldOptions = fieldOptions;
 	}
 
-	public String getFieldConfigs() {
-		return fieldConfigs;
+	public HashMap getFieldConfigs() {
+		return (HashMap) fieldConfigs;
 	}
 
-	public void setFieldConfigs(String fieldConfigs) {
+	public void setFieldConfigs(HashMap fieldConfigs) {
 		this.fieldConfigs = fieldConfigs;
 	}
 
@@ -368,19 +380,19 @@ public class PublicationMeta implements Serializable {
 		this.errorMessage = errorMessage;
 	}
 
-	public String getDependencyChild() {
+	public Map getDependencyChild() {
 		return dependencyChild;
 	}
 
-	public void setDependencyChild(String dependencyChild) {
+	public void setDependencyChild(HashMap dependencyChild) {
 		this.dependencyChild = dependencyChild;
 	}
 
-	public String getDependencyParent() {
+	public Map getDependencyParent() {
 		return dependencyParent;
 	}
 
-	public void setDependencyParent(String dependencyParent) {
+	public void setDependencyParent(HashMap dependencyParent) {
 		this.dependencyParent = dependencyParent;
 	}
 
@@ -424,11 +436,11 @@ public class PublicationMeta implements Serializable {
 		this.value = value;
 	}
 
-	public String getOtherValue() {
+	public Map getOtherValue() {
 		return otherValue;
 	}
 
-	public void setOtherValue(String otherValue) {
+	public void setOtherValue(HashMap otherValue) {
 		this.otherValue = otherValue;
 	}
 

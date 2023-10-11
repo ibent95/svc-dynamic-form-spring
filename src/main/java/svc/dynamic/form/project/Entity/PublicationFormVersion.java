@@ -3,13 +3,19 @@ package svc.dynamic.form.project.Entity;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.hibernate.annotations.Type;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import io.hypersistence.utils.hibernate.type.json.JsonStringType;
+import io.hypersistence.utils.hibernate.type.json.JsonType;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -24,6 +30,7 @@ import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.persistence.Transient;
 
 /**
  *
@@ -50,9 +57,11 @@ public class PublicationFormVersion implements Serializable {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
+    @JsonIgnore
 	private Long id;
 
     @Column(name = "id_publication_type", nullable = false, insertable = false, updatable = false)
+    @JsonIgnore
     private Long idPublicationType;
 
     @Column(name = "publication_form_version_name", nullable = false)
@@ -64,39 +73,48 @@ public class PublicationFormVersion implements Serializable {
 	@Lob
     @Column(name = "grid_system", columnDefinition = "LONGTEXT")
 	@Type(JsonStringType.class)
-	private String gridSystem;
+	private Map<String, Object> gridSystem;
 
     @Column(name = "flag_active", nullable = false, columnDefinition = "tiny default 1")
+    @JsonIgnore
 	private boolean flagActive;
 
 	@Column(name = "create_user", length = 50, nullable = false, columnDefinition = "VARCHAR(50) default 'systems'")
+    @JsonIgnore
 	private String createUser = "systems";
 
     @Column(name = "created_at", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
+    @JsonIgnore
 	private LocalDateTime createdAt;
 
 	@Column(name = "update_user", length = 50, nullable = false, columnDefinition = "VARCHAR(50) default 'systems'")
+    @JsonIgnore
 	private String updateUser = "systems";
 
     @Column(name = "updated_at", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
+    @JsonIgnore
 	private LocalDateTime updatedAt;
 
 	@Column(length = 36, nullable = false, columnDefinition = "CHAR(36)")
 	private String uuid;
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "formVersion")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "formVersion", fetch = FetchType.EAGER)
+	@JsonIgnore
 	private Collection<PublicationMeta> publicationMetaCollection;
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "publicationFormVersion")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "publicationFormVersion", fetch = FetchType.EAGER)
+	@JsonIgnore
 	private Collection<Publication> publicationCollection;
 
     @ManyToOne(optional = false)
 	@JoinColumn(name = "id_publication_type", referencedColumnName = "id")
+	@JsonIgnore
 	private PublicationType publicationType;
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "formVersion")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "formVersion", fetch = FetchType.EAGER)
+	@JsonIgnore
 	private Collection<PublicationForm> publicationFormCollection;
 
 	public PublicationFormVersion() {
@@ -159,11 +177,11 @@ public class PublicationFormVersion implements Serializable {
 		this.publicationFormVersionCode = publicationFormVersionCode;
 	}
 
-	public String getGridSystem() {
+	public Map getGridSystem() {
 		return gridSystem;
 	}
 
-	public void setGridSystem(String gridSystem) {
+	public void setGridSystem(HashMap gridSystem) {
 		this.gridSystem = gridSystem;
 	}
 

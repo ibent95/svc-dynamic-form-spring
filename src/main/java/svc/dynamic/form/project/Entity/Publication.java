@@ -2,11 +2,19 @@ package svc.dynamic.form.project.Entity;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -20,6 +28,7 @@ import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.persistence.Transient;
 
 /**
  *
@@ -44,20 +53,24 @@ public class Publication implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
+    @JsonIgnore
     private Long id;
 
     @Column(name = "id_publication_general_type", nullable = false, insertable = false, updatable = false)
+    @JsonIgnore
     private Long idPublicationGeneralType;
 
     @Column(name = "id_publication_type", nullable = false, insertable = false, updatable = false)
+    @JsonIgnore
     private Long idPublicationType;
 
     @Column(name = "id_publication_form_version", nullable = false, insertable = false, updatable = false)
+    @JsonIgnore
     private Long idPublicationFormVersion;
 
     @Column(name = "id_publication_status", nullable = false, insertable = false, updatable = false)
+    @JsonIgnore
     private Long idPublicationStatus;
 
     @Column(name = "title")
@@ -67,27 +80,33 @@ public class Publication implements Serializable {
     private LocalDateTime publicationDate;
 
     @Column(name = "flag_active", nullable = false, columnDefinition = "TINYINT default 1")
+    @JsonIgnore
     private boolean flagActive;
 
     @Column(name = "create_user", length = 50, nullable = false, columnDefinition = "VARCHAR(50) default 'systems'")
+    @JsonIgnore
     private String createUser;
 
     @Column(name = "created_at", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
+    @JsonIgnore
     private LocalDateTime createdAt;
 
     @Column(name = "update_user", length = 50, nullable = false, columnDefinition = "VARCHAR(50) default 'systems'")
+    @JsonIgnore
     private String updateUser;
 
     @Column(name = "updated_at", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
+    @JsonIgnore
     private LocalDateTime updatedAt;
 
     @Column(length = 36, nullable = false, columnDefinition = "CHAR(36)")
     private String uuid;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "publication")
-    private Collection<PublicationMeta> publicationMetaCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "publication", fetch = FetchType.EAGER)
+    @JsonIgnore
+    private List<PublicationMeta> publicationMeta;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_publication_status", referencedColumnName = "id")
@@ -105,32 +124,45 @@ public class Publication implements Serializable {
     @JoinColumn(name = "id_publication_form_version", referencedColumnName = "id")
     private PublicationFormVersion publicationFormVersion;
 
-    public Publication() {
-    }
+    public Publication() {}
 
     public Publication(Long id) {
         this.id = id;
     }
 
-    public Publication(Long id, boolean flagActive, String createUser, LocalDateTime createdAt, String updateUser, LocalDateTime updatedAt, String uuid) {
+    public Publication(
+            Long id, Long idPublicationGeneralType, Long idPublicationType, Long idPublicationFormVersion,
+            Long idPublicationStatus, String title, LocalDateTime publicationDate, String uuid,
+            ArrayList<PublicationMeta> publicationMeta, PublicationStatus publicationStatus,
+            PublicationGeneralType publicationGeneralType, PublicationType publicationType,
+            PublicationFormVersion publicationFormVersion) {
         this.id = id;
-        this.flagActive = flagActive;
-        this.createUser = createUser;
-        this.createdAt = createdAt;
-        this.updateUser = updateUser;
-        this.updatedAt = updatedAt;
+        this.idPublicationGeneralType = idPublicationGeneralType;
+        this.idPublicationType = idPublicationType;
+        this.idPublicationFormVersion = idPublicationFormVersion;
+        this.idPublicationStatus = idPublicationStatus;
+        this.title = title;
+        this.publicationDate = publicationDate;
         this.uuid = uuid;
+        this.publicationMeta = publicationMeta;
+        this.publicationStatus = publicationStatus;
+        this.publicationGeneralType = publicationGeneralType;
+        this.publicationType = publicationType;
+        this.publicationFormVersion = publicationFormVersion;
     }
 
     @PrePersist
     public void onPrePersist() {
         this.setCreatedAt(LocalDateTime.now());
+        this.setCreateUser("system");
         this.setUpdatedAt(LocalDateTime.now());
+        this.setUpdateUser("system");
     }
 
     @PreUpdate
     public void onPreUpdate() {
         this.setUpdatedAt(LocalDateTime.now());
+        this.setUpdateUser("system");
     }
 
     public Long getId() {
@@ -237,12 +269,21 @@ public class Publication implements Serializable {
         this.uuid = uuid;
     }
 
-    public Collection<PublicationMeta> getPublicationMetaCollection() {
-        return publicationMetaCollection;
+    public List<PublicationMeta> getPublicationMeta() {
+        return publicationMeta;
     }
 
-    public void setPublicationMetaCollection(Collection<PublicationMeta> publicationMetaCollection) {
-        this.publicationMetaCollection = publicationMetaCollection;
+    public void setPublicationMeta(ArrayList<PublicationMeta> publicationMeta) {
+        this.publicationMeta = publicationMeta;
+    }
+
+    public void addPublicationMeta(PublicationMeta publicationMeta) {
+        if (this.publicationMeta == null) {
+            this.publicationMeta = new ArrayList();
+            
+        }
+
+        this.publicationMeta.add(publicationMeta);
     }
 
     public PublicationStatus getPublicationStatus() {

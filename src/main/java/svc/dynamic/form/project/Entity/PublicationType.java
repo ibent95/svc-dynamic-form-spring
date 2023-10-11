@@ -4,9 +4,12 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -20,6 +23,7 @@ import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.persistence.Transient;
 
 /**
  *
@@ -46,9 +50,11 @@ public class PublicationType implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
+    @JsonIgnore
     private Long id;
 
     @Column(name = "id_publication_general_type", insertable = false, updatable = false)
+    @JsonIgnore
     private Long idPublicationGeneralType;
 
     @Column(name = "publication_type_name", nullable = false)
@@ -58,29 +64,36 @@ public class PublicationType implements Serializable {
     private String publicationTypeCode;
 
     @Column(name = "flag_active", nullable = false, columnDefinition = "TINYINT default 1")
+    @JsonIgnore
     private boolean flagActive = true;
 
     @Column(name = "create_user", length = 50, nullable = false, columnDefinition = "VARCHAR(50) default 'systems'")
+    @JsonIgnore
     private String createUser = "systems";
 
     @Column(name = "created_at", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
+    @JsonIgnore
     private LocalDateTime createdAt;
 
     @Column(name = "update_user", length = 50, nullable = false, columnDefinition = "VARCHAR(50) default 'systems'")
+    @JsonIgnore
     private String updateUser = "systems";
 
     @Column(name = "updated_at", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
+    @JsonIgnore
     private LocalDateTime updatedAt;
 
     @Column(length = 36, nullable = false, columnDefinition = "CHAR(36)")
     private String uuid;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "publicationType")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "publicationType", fetch = FetchType.EAGER)
+    @JsonIgnore
     private Collection<Publication> publicationCollection;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "publicationType")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "publicationType", fetch = FetchType.EAGER)
+    @JsonIgnore
     private Collection<PublicationFormVersion> publicationFormVersionCollection;
 
     @ManyToOne(optional = false)

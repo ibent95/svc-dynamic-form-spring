@@ -2,8 +2,12 @@ package svc.dynamic.form.project.Entity;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.hibernate.annotations.Type;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.hypersistence.utils.hibernate.type.json.JsonStringType;
 import jakarta.persistence.Column;
@@ -19,6 +23,7 @@ import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.persistence.Transient;
 
 /**
  *
@@ -54,30 +59,35 @@ public class TemporaryFileUpload implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime uploadedDatetime;
 
-    @Column
     @Lob
+    @Column(name = "value", columnDefinition = "LONGTEXT")
     private String value;
 
     @Lob
     @Column(name = "other_value", columnDefinition = "LONGTEXT")
 	@Type(JsonStringType.class)
-    private String otherValue;
+    private Map<String, Object> otherValue;
 
     @Column(name = "flag_active", nullable = false, columnDefinition = "TINYINT default 1")
+    @JsonIgnore
     private Boolean flagActive = true;
 
     @Column(name = "create_user", length = 50, nullable = false, columnDefinition = "VARCHAR(50) default 'systems'")
+    @JsonIgnore
     private String createUser = "systems";
 
     @Column(name = "created_at", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
+    @JsonIgnore
     private LocalDateTime createdAt;
 
     @Column(name = "update_user", length = 50, nullable = false, columnDefinition = "VARCHAR(50) default 'systems'")
+    @JsonIgnore
     private String updateUser = "systems";
 
     @Column(name = "updated_at", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
+    @JsonIgnore
     private LocalDateTime updatedAt;
 
     @Column(length = 36, nullable = false, columnDefinition = "CHAR(36)")
@@ -90,7 +100,7 @@ public class TemporaryFileUpload implements Serializable {
         this.id = id;
     }
 
-    public TemporaryFileUpload(Long id, LocalDateTime uploadedDatetime, String value, String otherValue, Boolean flagActive, String createUser, LocalDateTime createdAt, String updateUser, LocalDateTime updatedAt, String uuid) {
+    public TemporaryFileUpload(Long id, LocalDateTime uploadedDatetime, String value, HashMap otherValue, Boolean flagActive, String createUser, LocalDateTime createdAt, String updateUser, LocalDateTime updatedAt, String uuid) {
         this.id = id;
         this.uploadedDatetime = uploadedDatetime;
         this.value = value;
@@ -146,11 +156,11 @@ public class TemporaryFileUpload implements Serializable {
         this.value = value;
     }
 
-    public String getOtherValue() {
+    public Map getOtherValue() {
         return otherValue;
     }
 
-    public void setOtherValue(String otherValue) {
+    public void setOtherValue(HashMap otherValue) {
         this.otherValue = otherValue;
     }
 

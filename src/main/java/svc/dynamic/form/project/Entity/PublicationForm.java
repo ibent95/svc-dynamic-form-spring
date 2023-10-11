@@ -3,13 +3,18 @@ package svc.dynamic.form.project.Entity;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.hibernate.annotations.Type;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.hypersistence.utils.hibernate.type.json.JsonStringType;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -24,6 +29,7 @@ import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.persistence.Transient;
 
 /**
  *
@@ -95,7 +101,7 @@ public class PublicationForm implements Serializable {
     @Lob
     @Column(name = "field_configs", columnDefinition = "LONGTEXT")
 	@Type(JsonStringType.class)
-    private String fieldConfigs;
+    private HashMap<String, Object> fieldConfigs;
 
     private String description;
 
@@ -103,7 +109,7 @@ public class PublicationForm implements Serializable {
     private Integer orderPosition;
 
     @Lob
-    @Column(name = "validation_configs")
+    @Column(name = "validation_configs", columnDefinition = "LONGTEXT")
     private String validationConfigs;
 
     @Column(name = "error_message")
@@ -112,12 +118,12 @@ public class PublicationForm implements Serializable {
     @Lob
     @Column(name = "dependency_child", columnDefinition = "LONGTEXT")
 	@Type(JsonStringType.class)
-    private String dependencyChild;
+    private HashMap<String, Object> dependencyChild;
 
     @Lob
     @Column(name = "dependency_parent", columnDefinition = "LONGTEXT")
 	@Type(JsonStringType.class)
-    private String dependencyParent;
+    private HashMap<String, Object> dependencyParent;
 
     @Column(name = "flag_required", nullable = false, columnDefinition = "TINYINT default 0")
     private boolean flagRequired;
@@ -132,26 +138,31 @@ public class PublicationForm implements Serializable {
     private boolean flagFieldPublishDate;
 
     @Column(name = "flag_active", nullable = false, columnDefinition = "TINYINT default 1")
+    @JsonIgnore
     private boolean flagActive;
 
     @Column(name = "create_user", length = 50, nullable = false, columnDefinition = "VARCHAR(50) default 'systems'")
+    @JsonIgnore
     private String createUser;
 
     @Column(name = "created_at", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
+    @JsonIgnore
     private LocalDateTime createdAt;
 
     @Column(name = "update_user", length = 50, nullable = false, columnDefinition = "VARCHAR(50) default 'systems'")
+    @JsonIgnore
     private String updateUser;
 
     @Column(name = "updated_at", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
+    @JsonIgnore
     private LocalDateTime updatedAt;
 
     @Column(length = 36, nullable = false, columnDefinition = "CHAR(36)")
     private String uuid;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "form")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "form", fetch = FetchType.EAGER)
     private Collection<PublicationMeta> publicationMetaCollection;
 
     @ManyToOne(optional = false)
@@ -270,11 +281,11 @@ public class PublicationForm implements Serializable {
         this.fieldOptions = fieldOptions;
     }
 
-    public String getFieldConfigs() {
-        return fieldConfigs;
+    public HashMap getFieldConfigs() {
+        return (HashMap) fieldConfigs;
     }
 
-    public void setFieldConfigs(String fieldConfigs) {
+    public void setFieldConfigs(HashMap fieldConfigs) {
         this.fieldConfigs = fieldConfigs;
     }
 
@@ -310,19 +321,19 @@ public class PublicationForm implements Serializable {
         this.errorMessage = errorMessage;
     }
 
-    public String getDependencyChild() {
+    public HashMap getDependencyChild() {
         return dependencyChild;
     }
 
-    public void setDependencyChild(String dependencyChild) {
+    public void setDependencyChild(HashMap dependencyChild) {
         this.dependencyChild = dependencyChild;
     }
 
-    public String getDependencyParent() {
+    public HashMap getDependencyParent() {
         return dependencyParent;
     }
 
-    public void setDependencyParent(String dependencyParent) {
+    public void setDependencyParent(HashMap dependencyParent) {
         this.dependencyParent = dependencyParent;
     }
 
