@@ -84,8 +84,6 @@ public class PublicationCommandController {
 
             Publication publicationData = this.publicationSvc.setDataByDynamicForm(requestParam, request, publicationFormVersion, publication);
 
-            System.out.println(publicationData.getId().toString());
-
             this.publicationRepo.save(publicationData);
 
             this.responseObject.data = publicationData;

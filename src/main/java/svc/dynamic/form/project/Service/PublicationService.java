@@ -134,8 +134,6 @@ public class PublicationService {
         while (metaDataRequestData.hasNext()) {
             JsonNode metaData = metaDataRequestData.next();
 
-            System.out.println(metaData);
-
             String titleCase = (titleFieldConfig == null)
                 ? "title"
                 : titleFieldConfig.getFieldName();
