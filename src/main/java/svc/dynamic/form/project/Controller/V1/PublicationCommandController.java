@@ -2,6 +2,8 @@ package svc.dynamic.form.project.Controller.V1;
 
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -59,6 +61,8 @@ public class PublicationCommandController {
     private PublicationTypeRepository publicationTypeRepo;
     @Autowired
     private PublicationFormVersionRepository publicationFormVersionRepo;
+
+    private static final Logger logger = LoggerFactory.getLogger(PublicationCommandController.class);
 
     public PublicationCommandController() {}
 
