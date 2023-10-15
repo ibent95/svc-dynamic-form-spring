@@ -9,5 +9,7 @@ import svc.dynamic.form.project.Entity.TemporaryFileUpload;
  * @author ibent95
  */
 public interface TemporaryFileUploadRepository extends CrudRepository<TemporaryFileUpload, Id> {
+
+    TemporaryFileUpload findByUuid(String uuid);
 	
 }

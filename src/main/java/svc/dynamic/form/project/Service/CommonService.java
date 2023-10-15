@@ -1,18 +1,37 @@
 package svc.dynamic.form.project.Service;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.text.Normalizer;
+import java.text.Normalizer.Form;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
+import jakarta.servlet.ServletContext;
+import svc.dynamic.form.project.Component.MimeTypesComponent;
 import svc.dynamic.form.project.Component.ResponseHashMapComponent;
 import svc.dynamic.form.project.Component.ResponseIterableComponent;
 import svc.dynamic.form.project.Component.ResponseListComponent;
 import svc.dynamic.form.project.Component.ResponseObjectComponent;
+import svc.dynamic.form.project.Configuration.AppProperties;
+import svc.dynamic.form.project.Configuration.FileStorageProperties;
+import svc.dynamic.form.project.Exception.FileStorageException;
 
 /**
  *
@@ -29,14 +48,77 @@ public class CommonService {
     private ResponseHashMapComponent responseHashMap;
     @Autowired
     private ResponseIterableComponent responseIterable;
+    @Autowired
+    private MimeTypesComponent mimeTypeComponent;
 
-	Map<String, Integer> paginator;
+	@Autowired
+	private ServletContext servletContext;
+
+	@Autowired
+	AppProperties appProperties;
+	@Autowired
+	FileStorageProperties fileStorageProperties;
+
+	private String appRoot;
+	private Path fileStoragePath;
+	private final Pattern NONLATIN = Pattern.compile("[^\\w-]");
+  	private final Pattern WHITESPACE = Pattern.compile("[\\s]");
+	private Map<String, Integer> paginator;
+
+	HashMap<String, Object> hashMapResults;
+	List<Object> results;
+	Object result;
 
 	public CommonService() {
+		// this.appRoot = servletContext.getRealPath("/");
+		this.fileStoragePath = Paths.get("public/files").toAbsolutePath().normalize();
+		try {
+			Files.createDirectories(this.fileStoragePath);
+		} catch (IOException e) {
+			throw new FileStorageException("Error on creating file storage.", e);
+		}
+
 		this.paginator = new HashMap();
 		this.paginator.put("limit", 0);
 		this.paginator.put("offset", 0);
 		this.paginator.put("page_index", 0);
+
+		this.hashMapResults = new HashMap<>();
+		this.results = null;
+		this.result = null;
+	}
+
+	public Path setGetFileStoragePath(String parameter) throws IOException {
+
+		switch (parameter) {
+			case "users_directory":
+				this.fileStoragePath = Paths.get(this.fileStorageProperties.getSecretUsersDirectory()).toAbsolutePath().normalize();
+				break;
+
+			case "publications_directory":
+				this.fileStoragePath = Paths.get(this.fileStorageProperties.getSecretPublicationsDirectory()).toAbsolutePath().normalize();
+				break;
+
+			case "research_directory":
+				this.fileStoragePath = Paths.get(this.fileStorageProperties.getSecretResearchDirectory()).toAbsolutePath().normalize();
+				break;
+				
+			default:
+				this.fileStoragePath = Paths.get(this.fileStorageProperties.getPublicFilesDirectory()).toAbsolutePath().normalize();
+				break;
+		}
+
+		Files.createDirectories(this.fileStoragePath);
+
+		return this.fileStoragePath;
+	}
+
+	public String slug(String input) {
+		String nowhitespace = WHITESPACE.matcher(input).replaceAll("-");
+		String normalized 	= Normalizer.normalize(nowhitespace, Form.NFD);
+		String slug 		= NONLATIN.matcher(normalized).replaceAll("");
+
+		return slug.toLowerCase(Locale.ENGLISH);
 	}
 
 	public Map setGetPaginator(@RequestParam Map<String, String> request) {
@@ -64,6 +146,29 @@ public class CommonService {
 
 	public String createUUID() {
 		return UUID.randomUUID().toString();
+	}
+
+	public HashMap<String, Object> uploadFile(MultipartFile file, String parameter, String secondaryUrlPart) throws FileStorageException, IOException {
+		String originalName	= StringUtils.cleanPath(file.getOriginalFilename()); // Already with extension
+		String[] originalNameArray	= StringUtils.cleanPath(file.getOriginalFilename()).split("\\."); // Already with extension
+        String slugName		= this.slug(originalNameArray[0]);
+		String extension	= "." + this.mimeTypeComponent.getExtension(file.getContentType());
+		String name			= slugName + "-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("YMdHHmmssSSS")).toString() + extension;
+
+		Path targetPath 	= this.setGetFileStoragePath(parameter).resolve(name);
+		String path 		= targetPath.toString();
+
+		Files.copy(file.getInputStream(), targetPath, StandardCopyOption.REPLACE_EXISTING);
+
+		this.hashMapResults = new HashMap<>();
+		this.hashMapResults.put("original_name", originalName);
+		this.hashMapResults.put("slug", slugName);
+		this.hashMapResults.put("name", name);
+		this.hashMapResults.put("path", path);
+		this.hashMapResults.put("url", this.appProperties.getBaseUrl() + "/" + secondaryUrlPart + "/" + name);
+		this.hashMapResults.put("extension", extension);
+
+		return this.hashMapResults;
 	}
 
 }

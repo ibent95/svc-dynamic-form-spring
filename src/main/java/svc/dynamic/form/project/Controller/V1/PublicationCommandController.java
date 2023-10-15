@@ -1,5 +1,6 @@
 package svc.dynamic.form.project.Controller.V1;
 
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -9,12 +10,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,7 +23,6 @@ import svc.dynamic.form.project.Component.ResponseListComponent;
 import svc.dynamic.form.project.Component.ResponseObjectComponent;
 import svc.dynamic.form.project.Entity.Publication;
 import svc.dynamic.form.project.Entity.PublicationFormVersion;
-import svc.dynamic.form.project.Entity.PublicationStatus;
 import svc.dynamic.form.project.Entity.PublicationType;
 import svc.dynamic.form.project.Repository.PublicationFormVersionRepository;
 import svc.dynamic.form.project.Repository.PublicationRepository;
@@ -70,6 +68,7 @@ public class PublicationCommandController {
     @PutMapping(value = "publications/{uuid}")
     public ResponseEntity<ResponseObjectComponent> save(
         @RequestParam Map<String, Object> requestParam,
+        @RequestParam("meta_data_files") List<MultipartFile> requestFilesParam,
         HttpServletRequest request
     ) {
         String uuid = (requestParam.containsKey("uuid"))
@@ -86,7 +85,7 @@ public class PublicationCommandController {
 
             PublicationFormVersion publicationFormVersion = this.publicationFormVersionRepo.findByIdPublicationTypeAndFlagActive(publicationType.getId(), true);
 
-            Publication publicationData = this.publicationSvc.setDataByDynamicForm(requestParam, request, publicationFormVersion, publication);
+            Publication publicationData = this.publicationSvc.setDataByDynamicForm(requestParam, requestFilesParam, request, publicationFormVersion, publication);
 
             this.publicationRepo.save(publicationData);
 

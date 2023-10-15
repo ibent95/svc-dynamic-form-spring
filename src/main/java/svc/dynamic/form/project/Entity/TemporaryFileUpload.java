@@ -66,7 +66,7 @@ public class TemporaryFileUpload implements Serializable {
     @Lob
     @Column(name = "other_value", columnDefinition = "LONGTEXT")
 	@Type(JsonStringType.class)
-    private Map<String, Object> otherValue;
+    private HashMap<String, Object> otherValue;
 
     @Column(name = "flag_active", nullable = false, columnDefinition = "TINYINT default 1")
     @JsonIgnore
@@ -156,7 +156,7 @@ public class TemporaryFileUpload implements Serializable {
         this.value = value;
     }
 
-    public Map getOtherValue() {
+    public HashMap getOtherValue() {
         return otherValue;
     }
 

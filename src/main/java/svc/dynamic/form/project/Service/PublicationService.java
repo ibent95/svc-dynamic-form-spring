@@ -1,26 +1,27 @@
 package svc.dynamic.form.project.Service;
 
-import java.time.LocalDate;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+import java.util.Spliterator;
+import java.util.Spliterators;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
-import org.hibernate.collection.spi.PersistentCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
-import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
@@ -31,6 +32,8 @@ import svc.dynamic.form.project.Entity.PublicationGeneralType;
 import svc.dynamic.form.project.Entity.PublicationMeta;
 import svc.dynamic.form.project.Entity.PublicationStatus;
 import svc.dynamic.form.project.Entity.PublicationType;
+import svc.dynamic.form.project.Entity.TemporaryFileUpload;
+import svc.dynamic.form.project.Exception.FileStorageException;
 import svc.dynamic.form.project.Repository.PublicationStatusRepository;
 import svc.dynamic.form.project.Repository.TemporaryFileUploadRepository;
 
@@ -58,17 +61,29 @@ public class PublicationService {
     }
 
     private JsonNode getRequestMetaDataByUuid(
-        JsonNode sourceData2,
+        Collection<JsonNode> sourceData2,
         String uuid
     ) {
-        return sourceData2.get("uuid");
+        return sourceData2
+            .stream()
+            .filter(item
+                -> item.get("uuid").asText().equals(uuid)
+            )
+            .findFirst()
+            .get();
     }
 
     private JsonNode getRequestMetaDataByFieldName(
-        JsonNode sourceData3,
+        Collection<JsonNode> sourceData3,
         String fieldName
     ) {
-        return sourceData3.get(fieldName) ;
+        return sourceData3
+            .stream()
+            .filter(item
+                -> item.get("field_name").asText().equals(fieldName)
+            )
+            .findFirst()
+            .get();
     }
 
     private Collection<PublicationForm> getFormConfigsByParentId(
@@ -80,17 +95,18 @@ public class PublicationService {
 
     /**
 	 * This function response to get Main and Meta Data of input from Dynamic Form
-     * @throws JsonProcessingException
-     * @throws JsonMappingException
+     * @throws IOException
+     * @throws FileStorageException
 	 */
     public Publication setDataByDynamicForm(
         @RequestParam Map<String, Object> requestParam,
+        @RequestParam("meta_data_files") List<MultipartFile> requestFilesParam,
         HttpServletRequest request,
         PublicationFormVersion formVersion,
         Publication publication
-    ) throws JsonMappingException, JsonProcessingException {
-        Publication mainData    = this.setMainData(requestParam, request, formVersion, publication);
-        Publication results     = this.setMetaData(requestParam, request, formVersion, mainData);
+    ) throws FileStorageException, IOException {
+        Publication mainData    = this.setMainData(requestParam, requestFilesParam, request, formVersion, publication);
+        Publication results     = this.setMetaData(requestParam, requestFilesParam, request, formVersion, mainData);
 
         return results;
     }
@@ -102,6 +118,7 @@ public class PublicationService {
 	 */
 	private Publication setMainData(
         @RequestParam Map<String, Object> requestParam,
+        @RequestParam("meta_data_files") List<MultipartFile> requestFilesParam,
         HttpServletRequest request,
         PublicationFormVersion formVersion,
         Publication publication
@@ -169,13 +186,16 @@ public class PublicationService {
 
 	/**
 	 * This function response to organize Meta Data of input from Dynamic Form
+	 * @throws IOException
+	 * @throws FileStorageException
 	 */
 	private Publication setMetaData(
         @RequestParam Map<String, Object> requestParam,
+        @RequestParam("meta_data_files") List<MultipartFile> requestFilesParam,
         HttpServletRequest request,
         PublicationFormVersion formVersion,
         Publication publication
-    ) throws JsonMappingException, JsonProcessingException {
+    ) throws FileStorageException, IOException {
         // Initial value
 		Publication results        = publication;
 
@@ -198,11 +218,11 @@ public class PublicationService {
 
         // Organize the new Meta Data (create or update)
         if (request.getMethod().equals("POST")) {
-            results    = this.updateMetaData(requestParam, request, formVersion, publication, null);
+            results    = this.updateMetaData(requestParam, requestFilesParam, request, formVersion, publication, null);
         }
 
         if (request.getMethod().equals("PUT")) {
-            results    = this.updateMetaData(requestParam, request, formVersion, publication, null);
+            results    = this.updateMetaData(requestParam, requestFilesParam, request, formVersion, publication, null);
         }
 
 		return results;
@@ -210,14 +230,20 @@ public class PublicationService {
 
     private Publication updateMetaData(
         @RequestParam Map<String, Object> requestParam,
+        @RequestParam("meta_data_files") List<MultipartFile> requestFilesParam,
         HttpServletRequest request,
         PublicationFormVersion formVersion,
         Publication publication,
         PublicationMeta parentMetaDataConfig
-    ) throws JsonMappingException, JsonProcessingException {
+    ) throws FileStorageException, IOException {
+
         Map<String, Object> requestData        = requestParam;
-        JsonNode requestMetadataCollection     = this.objectMapper.readValue(requestData.get("meta_data").toString(), JsonNode.class);
-        Object requestFiles       = request.getAttribute("meta_data");
+        List<MultipartFile> requestFiles       = requestFilesParam;
+        Collection<JsonNode> requestMetadataCollection = this.convertIteratorToCollection(
+            this.objectMapper.readValue(
+                requestData.get("meta_data").toString(), JsonNode.class
+            ).elements()
+        );
 
         Publication results            = publication;
         List<PublicationMeta> metaDataConfigs    = (List<PublicationMeta>) publication.getPublicationMeta();
@@ -229,12 +255,12 @@ public class PublicationService {
         // Organize data requestData["meta_data"]
         Integer fieldConfigIndex = 0;
         for (PublicationForm fieldConfig : formConfigs) {
-            
             /**
              * Initial value:
              * If there is Meta Data in previous Publication Meta Data, then use it as initial value.
              * Other than that, set Meta Data by Form Configuration.
              */
+
             JsonNode metaData           = (
                     this.getRequestMetaDataByUuid(
                         requestMetadataCollection,
@@ -251,7 +277,7 @@ public class PublicationService {
                 );
 
             String metaDataConfigFromUuidQueries = (metaData != null)
-                ? metaData.get("data").get("uuid").toString()
+                ? metaData.get("uuid").asText()
                 : null;
             Long metaDataConfigFromIdQueries = (metaData != null)
                 ? fieldConfig.getId()
@@ -293,7 +319,7 @@ public class PublicationService {
                 case "panel":
                 case "stepper":
                 case "step":
-                    this.updateMetaData(requestParam, request, formVersion, results, metaDataConfig);
+                    this.updateMetaData(requestParam, requestFilesParam, request, formVersion, results, metaDataConfig);
                     break;
 
                 case "multiple_select":
@@ -304,50 +330,54 @@ public class PublicationService {
                 case "select":
                 case "autoselect":
                 case "autocomplete":
-                    // metaDataConfig.setValue(
-                    //     (metaData["data"]["value"]) ? metaData["data"]["value"] : null
-                    // );
-                    // metaDataConfig.setOtherValue(
-                    //     (metaData["data"]["other_value"]) ? metaData["data"]["other_value"] : null
-                    // );
+                    metaDataConfig.setValue(
+                        (metaData != null && metaData.get("value") != null) ? metaData.get("value").asText() : null
+                    );
+                    metaDataConfig.setOtherValue(
+                        (metaData != null && metaData.get("other_value") != null) ? this.objectMapper.convertValue(metaData.get("other_value"), HashMap.class) : null
+                    );
                     break;
 
                 case "file":
                 case "image":
                     /** Check if file exist.
-                     *  Another way is (isset(requestFiles) && isset(requestFiles[metaData["index"]])) */ 
-                    // file = (requestFiles[metaData["index"]]["value"]) ? requestFiles[metaData["index"]]["value"] : null;
-                    // uploadedFile = (file)
-                    //     ? this.commonSvc.uploadFile(
-                    //         file,
-                    //         "publications_directory",
-                    //         "api/v1/files/publications"
-                    //     )
-                    //     : null;
+                     *  Another way is (isset(requestFiles) && isset(requestFiles[metaData["index"]])) */
+                    MultipartFile file = (metaData != null && requestFiles.get(metaData.get("file_index").asInt()) != null)
+                        ? requestFiles.get(
+                            metaData.get("file_index").asInt()
+                        )
+                        : null;
+                    HashMap<String, Object> uploadedFile = (file != null)
+                        ? this.commonSvc.uploadFile(
+                            file,
+                            "publications_directory",
+                            "api/v1/files/publications"
+                        )
+                        : null;
 
-                    // if (uploadedFile) {
-                    //     metaDataConfig.setValue(
-                    //         (uploadedFile["original_name"]) ? uploadedFile["original_name"] : null
-                    //     );
-                    //     metaDataConfig.setOtherValue(uploadedFile);
-                    // }
+                    if (uploadedFile != null) {
+                        metaDataConfig.setValue(
+                            (uploadedFile.get("original_name") != null) ? uploadedFile.get("original_name").toString() : null
+                        );
+                        metaDataConfig.setOtherValue(uploadedFile);
+                    }
                     break;
 
                 case "file-upload":
                 case "image-upload":
                     /** Get temporary file meta data */
-                    // temporaryFileUpload = (metaData && isset(metaData["data"]["value"]))
-                    //     ? this.temporaryFileUploadRepo.findByUuid(metaData["data"]["value"])
-                    //     : null;
+                    TemporaryFileUpload temporaryFileUpload = (metaData != null && metaData.get("value") != null)
+                        ? this.temporaryFileUploadRepo.findByUuid(metaData.get("value").asText())
+                        : null;
 
-                    // if (temporaryFileUpload) {
-                    //     metaDataConfig.setValue(
-                    //         (temporaryFileUpload) ? temporaryFileUpload.getValue() : null
-                    //     );
-                    //     metaDataConfig.setOtherValue(
-                    //         (temporaryFileUpload) ? temporaryFileUpload.getOtherValue()[0] : null
-                    //     );
-                    // }
+                    if (temporaryFileUpload != null) {
+                        metaDataConfig.setValue(
+                            (temporaryFileUpload != null) ? temporaryFileUpload.getValue() : null
+                        );
+                        metaDataConfig.setOtherValue(
+                            (temporaryFileUpload != null) ? temporaryFileUpload.getOtherValue() : null
+                        );
+                    }
                     break;
 
                 case "date":
@@ -360,9 +390,9 @@ public class PublicationService {
                 case "owl-year":
                 case "owl-time":
                 case "owl-datetime":
-                    // metaDataConfig.setValue(
-                    //     (metaData["data"]["value"]) ? metaData["data"]["value"] : null
-                    // );
+                    metaDataConfig.setValue(
+                        (metaData != null && metaData.get("value") != null) ? metaData.get("value").asText() : null
+                    );
                     // metaDataConfig.setOtherValue([
                     //     "value" => null,
                     //     "text" => null
@@ -383,9 +413,9 @@ public class PublicationService {
                 case "mask_full_time":
                 case "url":
                 default:
-                    // metaDataConfig.setValue(
-                    //     (metaData["data"]["value"]) ? metaData["data"]["value"] : null
-                    // );
+                    metaDataConfig.setValue(
+                        (metaData != null && metaData.get("value") != null) ? metaData.get("value").asText() : null
+                    );
                     break;
 			}
 
@@ -579,5 +609,10 @@ public class PublicationService {
 
 		return results.findFirst().orElse(null);
 	}
+
+    private Collection convertIteratorToCollection(Iterator iterator) {
+        return (Collection) StreamSupport.stream(Spliterators.spliteratorUnknownSize(iterator, Spliterator.ORDERED), false)
+        .collect(Collectors.toList());
+    }
 
 }

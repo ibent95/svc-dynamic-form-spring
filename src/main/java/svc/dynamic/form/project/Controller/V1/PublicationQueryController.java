@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import jakarta.servlet.http.HttpServletRequest;
 import svc.dynamic.form.project.Component.ResponseHashMapComponent;
 import svc.dynamic.form.project.Component.ResponseIterableComponent;
 import svc.dynamic.form.project.Component.ResponseListComponent;
@@ -50,7 +49,7 @@ public class PublicationQueryController {
 		this.responseHashMap.info = "success";
 		this.responseHashMap.message = "Welcome to Dynamic Forms service in Spring Boot 3.";
 		this.responseHashMap.data = new HashMap<String, Object>();
-		this.responseHashMap.data.put("messages", "This is Publication API service.");
+		this.responseHashMap.data.put("message", "This is Publication API service.");
 		this.responseHashMap.data.put("date", new Date());
 
 		return ResponseEntity.status(this.responseHashMap.status).body(this.responseHashMap);

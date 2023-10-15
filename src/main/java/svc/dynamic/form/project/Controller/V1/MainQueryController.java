@@ -5,18 +5,19 @@ import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.servlet.http.HttpServletRequest;
 import svc.dynamic.form.project.Component.ResponseHashMapComponent;
-import svc.dynamic.form.project.Component.ResponseMapComponent;
 
 /**
  *
  * @author ibent95
  */
+@CrossOrigin(origins = "*", allowCredentials = "false")
 @RestController
 @RequestMapping(value = "public/api/v1")
 public class MainQueryController {
@@ -39,9 +40,9 @@ public class MainQueryController {
 
 		this.responseHashMap.status = 200;
 		this.responseHashMap.info = "success";
-		this.responseHashMap.message = "Welcome to Dynamic Forms service in Spring Boot 3.";
+		this.responseHashMap.message = "This is Dynamic Forms Main service.";
 		this.responseHashMap.data = new HashMap<String, Object>();
-		this.responseHashMap.data.put("messages", "This is Dynamic Forms Main service.");
+		this.responseHashMap.data.put("message", "Welcome to Dynamic Forms service in Spring Boot 3.");
 		this.responseHashMap.data.put("date", new Date());
 
 		return ResponseEntity.status(this.responseHashMap.status).body(this.responseHashMap);

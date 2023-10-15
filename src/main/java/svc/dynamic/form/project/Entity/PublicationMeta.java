@@ -436,7 +436,7 @@ public class PublicationMeta implements Serializable {
 		this.value = value;
 	}
 
-	public Map getOtherValue() {
+	public HashMap getOtherValue() {
 		return otherValue;
 	}
 
