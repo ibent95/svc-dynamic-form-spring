@@ -114,7 +114,7 @@ public class MainQueryController {
 		HttpServletRequest request
 	) {
 		try {
-			
+
 			List<MultipartFile> files = (requestFilesParam != null) ? requestFilesParam : null;
             List<HashMap<String, Object>> uploadedFiles = new ArrayList<>();
             String[] uploadedFileNames = {};

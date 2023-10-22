@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Stream;
 
@@ -72,39 +73,39 @@ public class PublicationService {
         Collection<PublicationMeta> sourceData1,
         String uuid
     ) {
-        return sourceData1
+        Optional<PublicationMeta> results = sourceData1
             .stream()
             .filter(
                 item -> item.getUuid().equals(uuid)
             )
-            .findFirst()
-            .get();
+            .findFirst();
+        return (results.isPresent()) ? results.get() : null;
     }
 
     private JsonNode getRequestMetaDataByUuid(
         Collection<JsonNode> sourceData2,
         String uuid
     ) {
-        return sourceData2
+        Optional<JsonNode> results = sourceData2
             .stream()
             .filter(item
                 -> item.get("uuid").asText().equals(uuid)
             )
-            .findFirst()
-            .get();
+            .findFirst();
+        return (results.isPresent()) ? results.get() : null;
     }
 
     private JsonNode getRequestMetaDataByFieldName(
         Collection<JsonNode> sourceData3,
         String fieldName
     ) {
-        return sourceData3
+        Optional<JsonNode> results = sourceData3
             .stream()
             .filter(item
                 -> item.get("field_name").asText().equals(fieldName)
             )
-            .findFirst()
-            .get();
+            .findFirst();
+        return (results.isPresent()) ? results.get() : null;
     }
 
     private Collection<PublicationForm> getFormConfigsByParentId(
@@ -148,7 +149,7 @@ public class PublicationService {
         /**
          *  Initial value
          *  results is an instance of Publication entity or publication
-         *  If publication is not send than UPDATE mechanism is running, default is CREATE.
+         *  If publication is send than UPDATE mechanism is running, default is CREATE.
          */
         Publication results 				    = (publication != null) ? publication : new Publication();
         Map<String, Object> requestData 		= requestParam;
@@ -235,8 +236,6 @@ public class PublicationService {
             }
         }
 
-        // this.logger.info("Publication ID - " . publication.getId());
-
         // Organize the new Meta Data (create or update)
         if (request.getMethod().equals("POST")) {
             results    = this.updateMetaData(requestParam, requestFilesParam, request, formVersion, publication, null);
@@ -276,6 +275,7 @@ public class PublicationService {
         // Organize data requestData["meta_data"]
         Integer fieldConfigIndex = 0;
         for (PublicationForm fieldConfig : formConfigs) {
+
             /**
              * Initial value:
              * If there is Meta Data in previous Publication Meta Data, then use it as initial value.
