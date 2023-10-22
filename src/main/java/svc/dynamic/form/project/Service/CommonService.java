@@ -7,6 +7,7 @@ import static org.slf4j.event.Level.TRACE;
 import static org.slf4j.event.Level.WARN;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -33,6 +34,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.event.Level;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -248,5 +251,13 @@ public class CommonService {
 
 		return this.hashMapResults;
 	}
+
+	public Resource getFile(String parameter, String fileName)
+	throws MalformedURLException, IOException {
+		Path filePath 		= this.setGetFileStoragePath(parameter).resolve(fileName).normalize();
+		Resource resource 	= new UrlResource(filePath.toUri());
+
+		return resource;
+    }
 
 }
