@@ -40,7 +40,7 @@ public class DynamicFormService {
 	};
 
 	private final String[] EXCLUDE_FIELDS = {
-		"id", "id_form", "id_form_version", "id_form_parent", 
+		"id", "id_publication", "id_form", "id_form_version", "id_form_parent", 
 		"order", "flag_judul_publikasi", "flag_tgl_publikasi", 
 		"flag_peran"
 	};

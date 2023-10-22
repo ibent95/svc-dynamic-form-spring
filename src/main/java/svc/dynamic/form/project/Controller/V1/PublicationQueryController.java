@@ -128,7 +128,7 @@ public class PublicationQueryController {
             // FormVersion
             Collection<PublicationFormVersion> formVersions     = publicationType.getPublicationFormVersionCollection();
             PublicationFormVersion formVersion                  = this.publicationSvc.getActiveFormVersionData(formVersions);
-            CopyOnWriteArrayList<HashMap<String, Object>> formsCollection = this.publicationSvc.getFormMetaData(formVersion);
+            CopyOnWriteArrayList<HashMap<String, Object>> formsCollection = this.publicationSvc.getFormMetaDataByPublicationFormCollection(formVersion.getPublicationFormCollection());
             Collection<HashMap<String, Object>> forms           = this.dynamicFormSvc.setFields(formsCollection, formVersion.getGridSystem());
 
             HashMap<String, Object> formMetaData                = this.publicationSvc.setGetFormMetaData(formVersion, forms);
@@ -142,6 +142,32 @@ public class PublicationQueryController {
             this.responseHashMap.status  = 400;
             this.responseHashMap.info    = "error";
             this.responseHashMap.message = "Error on get form metadata data by Publication Type Code: " + publicationTypeCode + ".";
+            this.commonSvc.setLogger(ERROR, this.responseHashMap.message, e);
+        }
+
+        return ResponseEntity.status(this.responseHashMap.status).body(this.responseHashMap);
+    }
+
+    @RequestMapping(value = "publications/{publicationUuid}/form-meta-data", method = RequestMethod.GET)
+    public ResponseEntity<ResponseHashMapComponent> getFormMetaDataByPublicationUuid(@PathVariable String publicationUuid) {
+
+        try {
+            Publication publication                             = this.publicationRepo.findByUuid(publicationUuid);
+            PublicationFormVersion formVersion                  = publication.getPublicationFormVersion();
+            CopyOnWriteArrayList<HashMap<String, Object>> formsCollection = this.publicationSvc.getFormMetaDataByPublicationMetaCollection(publication.getPublicationMeta());
+            Collection<HashMap<String, Object>> forms           = this.dynamicFormSvc.setFields(formsCollection, formVersion.getGridSystem());
+
+            HashMap<String, Object> formMetaData                = this.publicationSvc.setGetFormMetaData(formVersion, forms);
+
+            this.responseHashMap.data    = formMetaData;
+            this.responseHashMap.status  = 200;
+            this.responseHashMap.info    = "success";
+            this.responseHashMap.message = "Success on get form metadata data by Publication UUID: " + publicationUuid + ".";
+            this.commonSvc.setLogger(INFO, this.responseHashMap.message);
+        } catch (Exception e) {
+            this.responseHashMap.status  = 400;
+            this.responseHashMap.info    = "error";
+            this.responseHashMap.message = "Error on get form metadata data by Publication UUID: " + publicationUuid + ".";
             this.commonSvc.setLogger(ERROR, this.responseHashMap.message, e);
         }
 

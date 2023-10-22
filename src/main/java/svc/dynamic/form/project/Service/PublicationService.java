@@ -643,18 +643,28 @@ public class PublicationService {
         return this.hashMapResults;
     }
 
-    public CopyOnWriteArrayList<HashMap<String, Object>> getFormMetaData(
-        PublicationFormVersion formVersion
-    ) throws JsonMappingException, JsonProcessingException {
+    public CopyOnWriteArrayList<HashMap<String, Object>> getFormMetaDataByPublicationFormCollection(Collection<PublicationForm> forms)
+    throws JsonMappingException, JsonProcessingException {
         this.arrayListResults = new CopyOnWriteArrayList<>();
 
-        Collection<PublicationForm> formsCollection = formVersion.getPublicationFormCollection()
+        Collection<PublicationForm> formsCollection = forms
             .stream()
             .filter(
                 item -> item.isFlagActive()
             ).toList();
 
         String jsonData = this.objectMapper.writeValueAsString(formsCollection);
+
+        this.arrayListResults = this.objectMapper.readValue(jsonData, CopyOnWriteArrayList.class);
+
+        return this.arrayListResults;
+    }
+
+    public CopyOnWriteArrayList<HashMap<String, Object>> getFormMetaDataByPublicationMetaCollection(Collection<PublicationMeta> forms)
+    throws JsonMappingException, JsonProcessingException {
+        this.arrayListResults = new CopyOnWriteArrayList<>();
+
+        String jsonData = this.objectMapper.writeValueAsString(forms);
 
         this.arrayListResults = this.objectMapper.readValue(jsonData, CopyOnWriteArrayList.class);
 
