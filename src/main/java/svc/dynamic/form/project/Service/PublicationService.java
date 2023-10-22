@@ -2,16 +2,15 @@ package svc.dynamic.form.project.Service;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Spliterator;
-import java.util.Spliterators;
-import java.util.stream.Collectors;
+import java.util.Optional;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,7 +40,6 @@ import svc.dynamic.form.project.Repository.TemporaryFileUploadRepository;
 @Transactional
 public class PublicationService {
 
-    private Object results;
     @Autowired
     private ObjectMapper objectMapper;
     @Autowired
@@ -51,39 +49,63 @@ public class PublicationService {
     @Autowired
     private TemporaryFileUploadRepository temporaryFileUploadRepo;
 
+	HashMap<String, Object> hashMapResults;
+	Collection<HashMap<String, Object>> collectionResults;
+	CopyOnWriteArrayList<HashMap<String, Object>> arrayListResults;
+	List<Object> results;
+	Object result;
+
     public PublicationService() { /** code */ }
+
+    public PublicationFormVersion getActiveFormVersionData(
+        Collection<PublicationFormVersion> formVersionCollections
+    ) {
+        return formVersionCollections
+            .stream()
+            .filter(
+                item -> item.isFlagActive()
+            )
+            .findFirst()
+            .get();
+    }
 
     public PublicationMeta getPublicationMetaDataBy(
         Collection<PublicationMeta> sourceData1,
         String uuid
     ) {
-        return sourceData1.stream().filter(item -> item.getUuid().equals(uuid)).findFirst().orElse(null);
+        Optional<PublicationMeta> results = sourceData1
+            .stream()
+            .filter(
+                item -> item.getUuid().equals(uuid)
+            )
+            .findFirst();
+        return (results.isPresent()) ? results.get() : null;
     }
 
     private JsonNode getRequestMetaDataByUuid(
         Collection<JsonNode> sourceData2,
         String uuid
     ) {
-        return sourceData2
+        Optional<JsonNode> results = sourceData2
             .stream()
             .filter(item
                 -> item.get("uuid").asText().equals(uuid)
             )
-            .findFirst()
-            .get();
+            .findFirst();
+        return (results.isPresent()) ? results.get() : null;
     }
 
     private JsonNode getRequestMetaDataByFieldName(
         Collection<JsonNode> sourceData3,
         String fieldName
     ) {
-        return sourceData3
+        Optional<JsonNode> results = sourceData3
             .stream()
             .filter(item
                 -> item.get("field_name").asText().equals(fieldName)
             )
-            .findFirst()
-            .get();
+            .findFirst();
+        return (results.isPresent()) ? results.get() : null;
     }
 
     private Collection<PublicationForm> getFormConfigsByParentId(
@@ -127,7 +149,7 @@ public class PublicationService {
         /**
          *  Initial value
          *  results is an instance of Publication entity or publication
-         *  If publication is not send than UPDATE mechanism is running, default is CREATE.
+         *  If publication is send than UPDATE mechanism is running, default is CREATE.
          */
         Publication results 				    = (publication != null) ? publication : new Publication();
         Map<String, Object> requestData 		= requestParam;
@@ -214,8 +236,6 @@ public class PublicationService {
             }
         }
 
-        // this.logger.info("Publication ID - " . publication.getId());
-
         // Organize the new Meta Data (create or update)
         if (request.getMethod().equals("POST")) {
             results    = this.updateMetaData(requestParam, requestFilesParam, request, formVersion, publication, null);
@@ -239,7 +259,7 @@ public class PublicationService {
 
         Map<String, Object> requestData        = requestParam;
         List<MultipartFile> requestFiles       = requestFilesParam;
-        Collection<JsonNode> requestMetadataCollection = this.convertIteratorToCollection(
+        Collection<JsonNode> requestMetadataCollection = this.commonSvc.convertIteratorToCollection(
             this.objectMapper.readValue(
                 requestData.get("meta_data").toString(), JsonNode.class
             ).elements()
@@ -255,6 +275,7 @@ public class PublicationService {
         // Organize data requestData["meta_data"]
         Integer fieldConfigIndex = 0;
         for (PublicationForm fieldConfig : formConfigs) {
+
             /**
              * Initial value:
              * If there is Meta Data in previous Publication Meta Data, then use it as initial value.
@@ -610,9 +631,44 @@ public class PublicationService {
 		return results.findFirst().orElse(null);
 	}
 
-    private Collection convertIteratorToCollection(Iterator iterator) {
-        return (Collection) StreamSupport.stream(Spliterators.spliteratorUnknownSize(iterator, Spliterator.ORDERED), false)
-        .collect(Collectors.toList());
+    public HashMap<String, Object> setGetFormMetaData(PublicationFormVersion formVersion, Collection<HashMap<String, Object>> forms) throws JsonMappingException, JsonProcessingException {
+        this.hashMapResults = new HashMap<String, Object>();
+
+        String jsonData = this.objectMapper.writeValueAsString(formVersion);
+        
+        this.hashMapResults = this.objectMapper.readValue(jsonData, HashMap.class);
+
+        this.hashMapResults.put("forms", forms);
+
+        return this.hashMapResults;
+    }
+
+    public CopyOnWriteArrayList<HashMap<String, Object>> getFormMetaDataByPublicationFormCollection(Collection<PublicationForm> forms)
+    throws JsonMappingException, JsonProcessingException {
+        this.arrayListResults = new CopyOnWriteArrayList<>();
+
+        Collection<PublicationForm> formsCollection = forms
+            .stream()
+            .filter(
+                item -> item.isFlagActive()
+            ).toList();
+
+        String jsonData = this.objectMapper.writeValueAsString(formsCollection);
+
+        this.arrayListResults = this.objectMapper.readValue(jsonData, CopyOnWriteArrayList.class);
+
+        return this.arrayListResults;
+    }
+
+    public CopyOnWriteArrayList<HashMap<String, Object>> getFormMetaDataByPublicationMetaCollection(Collection<PublicationMeta> forms)
+    throws JsonMappingException, JsonProcessingException {
+        this.arrayListResults = new CopyOnWriteArrayList<>();
+
+        String jsonData = this.objectMapper.writeValueAsString(forms);
+
+        this.arrayListResults = this.objectMapper.readValue(jsonData, CopyOnWriteArrayList.class);
+
+        return this.arrayListResults;
     }
 
 }

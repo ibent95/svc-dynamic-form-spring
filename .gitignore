@@ -1,9 +1,11 @@
 HELP.md
 target/
+var/*
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
 /src/main/resources/local.properties
+/public/files/*
 
 ### Eclipse/STS ###
 .apt_generated

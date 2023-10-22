@@ -8,7 +8,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -23,6 +25,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -105,7 +108,9 @@ public class Publication implements Serializable {
     private String uuid;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "publication", fetch = FetchType.EAGER)
+    @OrderBy("order_position ASC")
     @JsonIgnore
+    @JsonManagedReference
     private List<PublicationMeta> publicationMeta;
 
     @ManyToOne(optional = false)
@@ -338,9 +343,9 @@ public class Publication implements Serializable {
         return true;
     }
 
-    @Override
-    public String toString() {
-        return "svc.dynamic.form.project.Entity.Publication[ id=" + id + " ]";
-    }
+    // @Override
+    // public String toString() {
+    //     return "svc.dynamic.form.project.Entity.Publication[ id=" + id + " ]";
+    // }
     
 }

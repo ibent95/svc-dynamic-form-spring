@@ -8,7 +8,9 @@ import java.util.Map;
 
 import org.hibernate.annotations.Type;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import io.hypersistence.utils.hibernate.type.json.JsonStringType;
 import jakarta.persistence.CascadeType;
@@ -163,10 +165,13 @@ public class PublicationForm implements Serializable {
     private String uuid;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "form", fetch = FetchType.EAGER)
+    @JsonIgnore
+    @JsonManagedReference
     private Collection<PublicationMeta> publicationMetaCollection;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_form_version", referencedColumnName = "id")
+    @JsonIgnore
     private PublicationFormVersion formVersion;
 
     public PublicationForm() {
@@ -453,9 +458,9 @@ public class PublicationForm implements Serializable {
         return true;
     }
 
-    @Override
-    public String toString() {
-        return "svc.dynamic.form.project.Entity.PublicationForm[ id=" + id + " ]";
-    }
+    // @Override
+    // public String toString() {
+    //     return "svc.dynamic.form.project.Entity.PublicationForm[ id=" + id + ", uuid=" + uuid + " ]";
+    // }
     
 }

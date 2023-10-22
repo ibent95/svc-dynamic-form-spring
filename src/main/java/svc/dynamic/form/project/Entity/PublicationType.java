@@ -4,7 +4,9 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -90,10 +92,12 @@ public class PublicationType implements Serializable {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "publicationType", fetch = FetchType.EAGER)
     @JsonIgnore
+    @JsonManagedReference
     private Collection<Publication> publicationCollection;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "publicationType", fetch = FetchType.EAGER)
     @JsonIgnore
+    @JsonManagedReference
     private Collection<PublicationFormVersion> publicationFormVersionCollection;
 
     @ManyToOne(optional = false)
@@ -252,9 +256,9 @@ public class PublicationType implements Serializable {
         return true;
     }
 
-    @Override
-    public String toString() {
-        return "svc.dynamic.form.project.Entity.PublicationType[ id=" + id + " ]";
-    }
+    // @Override
+    // public String toString() {
+    //     return "svc.dynamic.form.project.Entity.PublicationType[ id=" + id + " ]";
+    // }
     
 }
