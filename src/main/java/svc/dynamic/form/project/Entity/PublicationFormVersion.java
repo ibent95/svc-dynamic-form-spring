@@ -4,14 +4,14 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Map;
 
 import org.hibernate.annotations.Type;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import io.hypersistence.utils.hibernate.type.json.JsonStringType;
-import io.hypersistence.utils.hibernate.type.json.JsonType;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -30,7 +30,6 @@ import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
-import jakarta.persistence.Transient;
 
 /**
  *
@@ -73,7 +72,7 @@ public class PublicationFormVersion implements Serializable {
 	@Lob
     @Column(name = "grid_system", columnDefinition = "LONGTEXT")
 	@Type(JsonStringType.class)
-	private Map<String, Object> gridSystem;
+	private HashMap<String, Object> gridSystem;
 
     @Column(name = "flag_active", nullable = false, columnDefinition = "tiny default 1")
     @JsonIgnore
@@ -102,19 +101,23 @@ public class PublicationFormVersion implements Serializable {
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "formVersion", fetch = FetchType.EAGER)
 	@JsonIgnore
+	@JsonManagedReference
 	private Collection<PublicationMeta> publicationMetaCollection;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "publicationFormVersion", fetch = FetchType.EAGER)
 	@JsonIgnore
+	@JsonManagedReference
 	private Collection<Publication> publicationCollection;
 
     @ManyToOne(optional = false)
 	@JoinColumn(name = "id_publication_type", referencedColumnName = "id")
 	@JsonIgnore
+	@JsonBackReference
 	private PublicationType publicationType;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "formVersion", fetch = FetchType.EAGER)
 	@JsonIgnore
+	@JsonManagedReference
 	private Collection<PublicationForm> publicationFormCollection;
 
 	public PublicationFormVersion() {
@@ -177,11 +180,11 @@ public class PublicationFormVersion implements Serializable {
 		this.publicationFormVersionCode = publicationFormVersionCode;
 	}
 
-	public Map getGridSystem() {
+	public HashMap<String, Object> getGridSystem() {
 		return gridSystem;
 	}
 
-	public void setGridSystem(HashMap gridSystem) {
+	public void setGridSystem(HashMap<String, Object> gridSystem) {
 		this.gridSystem = gridSystem;
 	}
 
@@ -285,9 +288,9 @@ public class PublicationFormVersion implements Serializable {
 		return true;
 	}
 
-	@Override
-	public String toString() {
-		return "svc.dynamic.form.project.Entity.PublicationFormVersion[ id=" + id + " ]";
-	}
+	// @Override
+	// public String toString() {
+	// 	return "svc.dynamic.form.project.Entity.PublicationFormVersion[ id=" + id + " ]";
+	// }
 	
 }

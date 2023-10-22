@@ -2,8 +2,6 @@ package svc.dynamic.form.project.Component;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 

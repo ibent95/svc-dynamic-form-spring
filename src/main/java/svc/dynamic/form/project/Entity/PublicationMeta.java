@@ -7,13 +7,12 @@ import java.util.Map;
 
 import org.hibernate.annotations.Type;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.hypersistence.utils.hibernate.type.json.JsonStringType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
@@ -25,7 +24,6 @@ import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
-import jakarta.persistence.Transient;
 
 /**
  *
@@ -173,14 +171,17 @@ public class PublicationMeta implements Serializable {
 
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "id_form_version", referencedColumnName = "id")
+	@JsonBackReference
 	private PublicationFormVersion formVersion;
 
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "id_publication", referencedColumnName = "id")
+	@JsonBackReference
 	private Publication publication;
 
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "id_form", referencedColumnName = "id")
+	@JsonBackReference
 	private PublicationForm form;
 
 	public PublicationMeta() {
@@ -525,7 +526,6 @@ public class PublicationMeta implements Serializable {
 
 	@Override
 	public boolean equals(Object object) {
-		// TODO: Warning - this method won't work in the case the id fields are not set
 		if (!(object instanceof PublicationMeta)) {
 			return false;
 		}
@@ -536,9 +536,9 @@ public class PublicationMeta implements Serializable {
 		return true;
 	}
 
-	@Override
-	public String toString() {
-		return "svc.dynamic.form.project.Entity.PublicationMeta[ id=" + id + " ]";
-	}
+	// @Override
+	// public String toString() {
+	// 	return "svc.dynamic.form.project.Entity.PublicationMeta[ id=" + id + " ]";
+	// }
 	
 }

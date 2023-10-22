@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -85,6 +86,7 @@ public class PublicationStatus implements Serializable {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "publicationStatus", fetch = FetchType.EAGER)
     @JsonIgnore
+    @JsonManagedReference
     private Collection<Publication> publicationCollection;
 
     public PublicationStatus() {
@@ -215,9 +217,9 @@ public class PublicationStatus implements Serializable {
         return true;
     }
 
-    @Override
-    public String toString() {
-        return "svc.dynamic.form.project.Entity.PublicationStatus[ id=" + id + " ]";
-    }
+    // @Override
+    // public String toString() {
+    //     return "svc.dynamic.form.project.Entity.PublicationStatus[ id=" + id + " ]";
+    // }
     
 }

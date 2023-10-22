@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -84,10 +85,12 @@ public class PublicationGeneralType implements Serializable {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "publicationGeneralType", fetch = FetchType.EAGER)
     @JsonIgnore
+    @JsonManagedReference
     private Collection<Publication> publicationCollection;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "publicationGeneralType", fetch = FetchType.EAGER)
     @JsonIgnore
+    @JsonManagedReference
     private Collection<PublicationType> publicationTypeCollection;
 
     public PublicationGeneralType() {
@@ -215,7 +218,6 @@ public class PublicationGeneralType implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof PublicationGeneralType)) {
             return false;
         }
@@ -226,9 +228,9 @@ public class PublicationGeneralType implements Serializable {
         return true;
     }
 
-    @Override
-    public String toString() {
-        return "svc.dynamic.form.project.Entity.PublicationGeneralType[ id=" + id + " ]";
-    }
+    // @Override
+    // public String toString() {
+    //     return "svc.dynamic.form.project.Entity.PublicationGeneralType[ id=" + id + " ]";
+    // }
     
 }

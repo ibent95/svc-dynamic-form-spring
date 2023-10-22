@@ -8,7 +8,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -106,22 +108,27 @@ public class Publication implements Serializable {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "publication", fetch = FetchType.EAGER)
     @JsonIgnore
+    @JsonManagedReference
     private List<PublicationMeta> publicationMeta;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_publication_status", referencedColumnName = "id")
+    @JsonBackReference
     private PublicationStatus publicationStatus;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_publication_general_type", referencedColumnName = "id")
+    @JsonBackReference
     private PublicationGeneralType publicationGeneralType;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_publication_type", referencedColumnName = "id")
+    @JsonBackReference
     private PublicationType publicationType;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_publication_form_version", referencedColumnName = "id")
+    @JsonBackReference
     private PublicationFormVersion publicationFormVersion;
 
     public Publication() {}
@@ -338,9 +345,9 @@ public class Publication implements Serializable {
         return true;
     }
 
-    @Override
-    public String toString() {
-        return "svc.dynamic.form.project.Entity.Publication[ id=" + id + " ]";
-    }
+    // @Override
+    // public String toString() {
+    //     return "svc.dynamic.form.project.Entity.Publication[ id=" + id + " ]";
+    // }
     
 }
