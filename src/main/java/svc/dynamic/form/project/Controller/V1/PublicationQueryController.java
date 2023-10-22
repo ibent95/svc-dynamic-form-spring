@@ -2,7 +2,6 @@ package svc.dynamic.form.project.Controller.V1;
 
 import static org.slf4j.event.Level.ERROR;
 import static org.slf4j.event.Level.INFO;
-import static org.slf4j.event.Level.TRACE;
 
 import java.util.Collection;
 import java.util.Date;
@@ -24,7 +23,6 @@ import svc.dynamic.form.project.Component.ResponseIterableComponent;
 import svc.dynamic.form.project.Component.ResponseListComponent;
 import svc.dynamic.form.project.Component.ResponseObjectComponent;
 import svc.dynamic.form.project.Entity.Publication;
-import svc.dynamic.form.project.Entity.PublicationForm;
 import svc.dynamic.form.project.Entity.PublicationFormVersion;
 import svc.dynamic.form.project.Entity.PublicationType;
 import svc.dynamic.form.project.Repository.PublicationRepository;

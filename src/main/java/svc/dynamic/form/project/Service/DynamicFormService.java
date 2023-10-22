@@ -118,7 +118,6 @@ public class DynamicFormService {
 					gridSystem
 				);
 
-				this.commonSvc.setLogger(INFO, "Debug2 - dynamicFormSvc9");
                 tempElement.put("children", children);
 
 				// Define flag_multiple_field set it`s value to true if multiple field found in children data

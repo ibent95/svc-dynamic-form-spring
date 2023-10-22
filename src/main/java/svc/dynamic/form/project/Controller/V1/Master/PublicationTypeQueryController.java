@@ -1,5 +1,8 @@
 package svc.dynamic.form.project.Controller.V1.Master;
 
+import static org.slf4j.event.Level.ERROR;
+import static org.slf4j.event.Level.INFO;
+
 import java.util.Collection;
 import java.util.List;
 
@@ -15,6 +18,7 @@ import svc.dynamic.form.project.Component.ResponseListComponent;
 import svc.dynamic.form.project.Component.ResponseObjectComponent;
 import svc.dynamic.form.project.Entity.PublicationType;
 import svc.dynamic.form.project.Repository.PublicationTypeRepository;
+import svc.dynamic.form.project.Service.CommonService;
 
 @RestController
 @RequestMapping(value = "public/api/v1/master")
@@ -31,7 +35,10 @@ public class PublicationTypeQueryController {
 
     @Autowired
     private PublicationTypeRepository publicationTypeRepo;
-    
+
+    @Autowired
+    private CommonService commonSvc;
+
     public PublicationTypeQueryController() { }
 
     @RequestMapping(value = "publication-types", method = RequestMethod.GET)
@@ -44,10 +51,12 @@ public class PublicationTypeQueryController {
             this.responseList.status = 200;
             this.responseList.info = "success";
             this.responseList.message = "Success on get publication type master data!";
+			this.commonSvc.setLogger(INFO, this.responseList.message);
         } catch (Exception e) {
             this.responseList.status = 400;
             this.responseList.info = "error";
             this.responseList.message = "Error on get publication type master data!";
+			this.commonSvc.setLogger(ERROR, this.responseList.message);
         }
 
         return ResponseEntity.status(this.responseList.status).body(this.responseList);

@@ -2,7 +2,6 @@ package svc.dynamic.form.project.Controller.V1;
 
 import static org.slf4j.event.Level.ERROR;
 import static org.slf4j.event.Level.INFO;
-import static org.slf4j.event.Level.TRACE;
 
 import java.util.List;
 import java.util.Map;
@@ -12,8 +11,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -137,5 +134,34 @@ public class PublicationCommandController {
 
         return ResponseEntity.status(this.responseObject.status).body(this.responseObject);
     }
-    
+
+    @RequestMapping(value = "publications/{uuid}", method = RequestMethod.DELETE)
+    public ResponseEntity<ResponseObjectComponent> remove(
+        @PathVariable String uuid
+    ) {
+
+        try {
+            Publication publication = (uuid != null)
+                ? this.publicationRepo.findByUuid(uuid)
+                : null;
+
+            publication.setFlagActive(false);
+
+            this.publicationRepo.save(publication);
+
+            this.responseObject.data = publication;
+            this.responseObject.status = 200;
+            this.responseObject.info = "success";
+            this.responseObject.message = "Success on edit publication data by UUID: " + uuid + ".";
+            this.commonSvc.setLogger(INFO, this.responseObject.message);
+        } catch (Exception e) {
+            this.responseObject.status = 400;
+            this.responseObject.info = "error";
+            this.responseObject.message = "Error on edit publications data by UUID: " + uuid + ". Message: " + e.getLocalizedMessage();
+            this.commonSvc.setLogger(ERROR, this.responseObject.message);
+        }
+
+        return ResponseEntity.status(this.responseObject.status).body(this.responseObject);
+    }
+
 }

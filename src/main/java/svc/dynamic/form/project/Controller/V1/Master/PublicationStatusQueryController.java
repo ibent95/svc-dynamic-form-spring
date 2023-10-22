@@ -1,6 +1,8 @@
 package svc.dynamic.form.project.Controller.V1.Master;
 
-import java.util.Collection;
+import static org.slf4j.event.Level.ERROR;
+import static org.slf4j.event.Level.INFO;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,14 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 import svc.dynamic.form.project.Component.ResponseHashMapComponent;
 import svc.dynamic.form.project.Component.ResponseIterableComponent;
 import svc.dynamic.form.project.Component.ResponseListComponent;
-import svc.dynamic.form.project.Component.ResponseMapComponent;
 import svc.dynamic.form.project.Component.ResponseObjectComponent;
-import svc.dynamic.form.project.Entity.PublicationGeneralType;
 import svc.dynamic.form.project.Entity.PublicationStatus;
-import svc.dynamic.form.project.Entity.PublicationType;
-import svc.dynamic.form.project.Repository.PublicationGeneralTypeRepository;
 import svc.dynamic.form.project.Repository.PublicationStatusRepository;
-import svc.dynamic.form.project.Repository.PublicationTypeRepository;
+import svc.dynamic.form.project.Service.CommonService;
 
 @RestController
 @RequestMapping(value = "public/api/v1/master")
@@ -36,7 +34,10 @@ public class PublicationStatusQueryController {
 
     @Autowired
     private PublicationStatusRepository publicationStatusRepo;
-    
+
+    @Autowired
+    private CommonService commonSvc;
+
     public PublicationStatusQueryController(
         // ResponseObjectComponent responseObject,
         // ResponseListComponent responseList,
@@ -63,10 +64,12 @@ public class PublicationStatusQueryController {
             this.responseList.status = 200;
             this.responseList.info = "success";
             this.responseList.message = "Success on get publication status master data!";
+			this.commonSvc.setLogger(INFO, this.responseList.message);
         } catch (Exception e) {
             this.responseList.status = 400;
             this.responseList.info = "error";
             this.responseList.message = "Error on get publication status master data!";
+			this.commonSvc.setLogger(ERROR, this.responseList.message);
         }
 
         return ResponseEntity.status(this.responseList.status).body(this.responseList);

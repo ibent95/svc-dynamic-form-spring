@@ -2,18 +2,15 @@ package svc.dynamic.form.project.Controller.V1;
 
 import static org.slf4j.event.Level.ERROR;
 import static org.slf4j.event.Level.INFO;
-import static org.slf4j.event.Level.TRACE;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -98,7 +95,7 @@ public class MainQueryController {
             this.responseObject.status 	= 400;
 			this.responseObject.info 	= "error";
 			this.responseObject.message = "Error on get uploaded file.";
-			this.commonSvc.setLogger(INFO, this.responseObject.message);
+			this.commonSvc.setLogger(ERROR, this.responseObject.message);
         }
 
 		return ResponseEntity.status(this.responseObject.status)
@@ -163,7 +160,7 @@ public class MainQueryController {
             this.responseObject.status 	= 400;
 			this.responseObject.info 	= "error";
 			this.responseObject.message = "Error on get uploaded file.";
-			this.commonSvc.setLogger(INFO, this.responseObject.message);
+			this.commonSvc.setLogger(ERROR, this.responseObject.message);
         }
 
 		return ResponseEntity.status(this.responseHashMap.status).body(this.responseHashMap);
