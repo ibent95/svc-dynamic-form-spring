@@ -171,17 +171,14 @@ public class PublicationMeta implements Serializable {
 
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "id_form_version", referencedColumnName = "id")
-	@JsonBackReference
 	private PublicationFormVersion formVersion;
 
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "id_publication", referencedColumnName = "id")
-	@JsonBackReference
 	private Publication publication;
 
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "id_form", referencedColumnName = "id")
-	@JsonBackReference
 	private PublicationForm form;
 
 	public PublicationMeta() {

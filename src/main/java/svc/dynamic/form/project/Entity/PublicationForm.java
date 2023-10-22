@@ -172,7 +172,6 @@ public class PublicationForm implements Serializable {
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_form_version", referencedColumnName = "id")
     @JsonIgnore
-    @JsonBackReference
     private PublicationFormVersion formVersion;
 
     public PublicationForm() {

@@ -77,24 +77,25 @@ public class PublicationQueryController {
     public ResponseEntity<ResponseListComponent> index(@RequestParam Map request) {
 
         try {
-            Map paginator = this.commonSvc.setGetPaginator(request);
+            Boolean flagActive                  = true;
+            Map paginator                       = this.commonSvc.setGetPaginator(request);
 
-            Long publicationsTotalCount = this.publicationRepo.count();
-            List<Publication> publicationsData =
-                (List<Publication>) this.publicationRepo.findAllWithLimitOffset(
-                    (int) paginator.get("limit"),
-                    (int) paginator.get("offset")
-                );
+            Long publicationsTotalCount         = this.publicationRepo.countByFlagActive(flagActive);
+            List<Publication> publicationsData  = this.publicationRepo.findAllWithFlagActiveLimitOffset(
+                flagActive,
+                (int) paginator.get("limit"),
+                (int) paginator.get("offset")
+            );
 
-            this.responseList.count = publicationsTotalCount;
-            this.responseList.data = publicationsData;
-            this.responseList.status = 200;
-            this.responseList.info = "success";
-            this.responseList.message = "Success on get publications data!";
+            this.responseList.count     = publicationsTotalCount;
+            this.responseList.data      = publicationsData;
+            this.responseList.status    = 200;
+            this.responseList.info      = "success";
+            this.responseList.message   = "Success on get publications data!";
         } catch (Exception e) {
-            this.responseList.status = 400;
-            this.responseList.info = "error";
-            this.responseList.message = "Error on get publications data!";
+            this.responseList.status    = 400;
+            this.responseList.info      = "error";
+            this.responseList.message   = "Error on get publications data!";
         }
 
         return ResponseEntity.status(this.responseList.status).body(this.responseList);
@@ -123,7 +124,7 @@ public class PublicationQueryController {
     public ResponseEntity<ResponseHashMapComponent> getFormMetaDataByPublicationTypeCode(@PathVariable String publicationTypeCode) {
 
         try {
-            PublicationType publicationType                 = this.publicationTypeRepo.findByPublicationTypeCode(publicationTypeCode);
+            PublicationType publicationType                     = this.publicationTypeRepo.findByPublicationTypeCode(publicationTypeCode);
             
             // FormVersion
             Collection<PublicationFormVersion> formVersions     = publicationType.getPublicationFormVersionCollection();

@@ -102,7 +102,6 @@ public class PublicationType implements Serializable {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_publication_general_type", referencedColumnName = "id")
-    @JsonBackReference
     private PublicationGeneralType publicationGeneralType;
 
     public PublicationType() {

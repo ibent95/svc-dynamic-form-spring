@@ -25,6 +25,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -100,6 +101,7 @@ public class PublicationFormVersion implements Serializable {
 	private String uuid;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "formVersion", fetch = FetchType.EAGER)
+    @OrderBy("order_position ASC")
 	@JsonIgnore
 	@JsonManagedReference
 	private Collection<PublicationMeta> publicationMetaCollection;
@@ -112,10 +114,10 @@ public class PublicationFormVersion implements Serializable {
     @ManyToOne(optional = false)
 	@JoinColumn(name = "id_publication_type", referencedColumnName = "id")
 	@JsonIgnore
-	@JsonBackReference
 	private PublicationType publicationType;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "formVersion", fetch = FetchType.EAGER)
+    @OrderBy("order_position ASC")
 	@JsonIgnore
 	@JsonManagedReference
 	private Collection<PublicationForm> publicationFormCollection;

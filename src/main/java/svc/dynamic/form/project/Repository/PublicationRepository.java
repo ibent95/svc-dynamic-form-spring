@@ -13,9 +13,11 @@ import svc.dynamic.form.project.Entity.Publication;
  * @author ibent95
  */
 public interface PublicationRepository extends CrudRepository<Publication, Id> {
+
+    Long countByFlagActive(Boolean flagActive);
 	
-    @Query(value = "SELECT p.* FROM publication p WHERE p.flag_active = true ORDER BY p.id ASC LIMIT ?1 OFFSET ?2", nativeQuery = true)
-    List<Publication> findAllWithLimitOffset(Integer limit, Integer offset);
+    @Query(value = "SELECT p.* FROM publication p WHERE p.flag_active = ?1 ORDER BY p.id ASC LIMIT ?2 OFFSET ?3", nativeQuery = true)
+    List<Publication> findAllWithFlagActiveLimitOffset(Boolean flagActive, Integer limit, Integer offset);
 
     Publication findByUuid(String uuid);
 
