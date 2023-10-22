@@ -1,9 +1,15 @@
 package svc.dynamic.form.project.Controller.V1;
 
+import static org.slf4j.event.Level.ERROR;
+import static org.slf4j.event.Level.INFO;
+import static org.slf4j.event.Level.TRACE;
+
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,8 +24,14 @@ import svc.dynamic.form.project.Component.ResponseIterableComponent;
 import svc.dynamic.form.project.Component.ResponseListComponent;
 import svc.dynamic.form.project.Component.ResponseObjectComponent;
 import svc.dynamic.form.project.Entity.Publication;
+import svc.dynamic.form.project.Entity.PublicationForm;
+import svc.dynamic.form.project.Entity.PublicationFormVersion;
+import svc.dynamic.form.project.Entity.PublicationType;
 import svc.dynamic.form.project.Repository.PublicationRepository;
+import svc.dynamic.form.project.Repository.PublicationTypeRepository;
 import svc.dynamic.form.project.Service.CommonService;
+import svc.dynamic.form.project.Service.DynamicFormService;
+import svc.dynamic.form.project.Service.PublicationService;
 
 @RestController
 @RequestMapping(value = "public/api/v1")
@@ -35,10 +47,16 @@ public class PublicationQueryController {
     private ResponseIterableComponent responseIterable;
 
     @Autowired
-    private CommonService commonSvc;
+    private PublicationRepository publicationRepo;
+    @Autowired
+    private PublicationTypeRepository publicationTypeRepo;
 
     @Autowired
-    private PublicationRepository publicationRepo;
+    private CommonService commonSvc;
+    @Autowired
+    private DynamicFormService dynamicFormSvc;
+    @Autowired
+    private PublicationService publicationSvc;
 
     public PublicationQueryController() { }
 
@@ -99,6 +117,35 @@ public class PublicationQueryController {
         }
 
         return ResponseEntity.status(this.responseObject.status).body(this.responseObject);
+    }
+
+    @RequestMapping(value = "publications/form-meta-data/{publicationTypeCode}", method = RequestMethod.GET)
+    public ResponseEntity<ResponseHashMapComponent> getFormMetaDataByPublicationTypeCode(@PathVariable String publicationTypeCode) {
+
+        try {
+            PublicationType publicationType                 = this.publicationTypeRepo.findByPublicationTypeCode(publicationTypeCode);
+            
+            // FormVersion
+            Collection<PublicationFormVersion> formVersions     = publicationType.getPublicationFormVersionCollection();
+            PublicationFormVersion formVersion                  = this.publicationSvc.getActiveFormVersionData(formVersions);
+            CopyOnWriteArrayList<HashMap<String, Object>> formsCollection = this.publicationSvc.getFormMetaData(formVersion);
+            Collection<HashMap<String, Object>> forms           = this.dynamicFormSvc.setFields(formsCollection, formVersion.getGridSystem());
+
+            HashMap<String, Object> formMetaData                = this.publicationSvc.setGetFormMetaData(formVersion, forms);
+
+            this.responseHashMap.data    = formMetaData;
+            this.responseHashMap.status  = 200;
+            this.responseHashMap.info    = "success";
+            this.responseHashMap.message = "Success on get form metadata data by Publication Type Code: " + publicationTypeCode + ".";
+            this.commonSvc.setLogger(INFO, this.responseHashMap.message);
+        } catch (Exception e) {
+            this.responseHashMap.status  = 400;
+            this.responseHashMap.info    = "error";
+            this.responseHashMap.message = "Error on get form metadata data by Publication Type Code: " + publicationTypeCode + ".";
+            this.commonSvc.setLogger(ERROR, this.responseHashMap.message, e);
+        }
+
+        return ResponseEntity.status(this.responseHashMap.status).body(this.responseHashMap);
     }
 
 }

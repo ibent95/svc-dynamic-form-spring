@@ -2,16 +2,14 @@ package svc.dynamic.form.project.Service;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Spliterator;
-import java.util.Spliterators;
-import java.util.stream.Collectors;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,7 +39,6 @@ import svc.dynamic.form.project.Repository.TemporaryFileUploadRepository;
 @Transactional
 public class PublicationService {
 
-    private Object results;
     @Autowired
     private ObjectMapper objectMapper;
     @Autowired
@@ -51,13 +48,37 @@ public class PublicationService {
     @Autowired
     private TemporaryFileUploadRepository temporaryFileUploadRepo;
 
+	HashMap<String, Object> hashMapResults;
+	Collection<HashMap<String, Object>> collectionResults;
+	CopyOnWriteArrayList<HashMap<String, Object>> arrayListResults;
+	List<Object> results;
+	Object result;
+
     public PublicationService() { /** code */ }
+
+    public PublicationFormVersion getActiveFormVersionData(
+        Collection<PublicationFormVersion> formVersionCollections
+    ) {
+        return formVersionCollections
+            .stream()
+            .filter(
+                item -> item.isFlagActive()
+            )
+            .findFirst()
+            .get();
+    }
 
     public PublicationMeta getPublicationMetaDataBy(
         Collection<PublicationMeta> sourceData1,
         String uuid
     ) {
-        return sourceData1.stream().filter(item -> item.getUuid().equals(uuid)).findFirst().orElse(null);
+        return sourceData1
+            .stream()
+            .filter(
+                item -> item.getUuid().equals(uuid)
+            )
+            .findFirst()
+            .get();
     }
 
     private JsonNode getRequestMetaDataByUuid(
@@ -239,7 +260,7 @@ public class PublicationService {
 
         Map<String, Object> requestData        = requestParam;
         List<MultipartFile> requestFiles       = requestFilesParam;
-        Collection<JsonNode> requestMetadataCollection = this.convertIteratorToCollection(
+        Collection<JsonNode> requestMetadataCollection = this.commonSvc.convertIteratorToCollection(
             this.objectMapper.readValue(
                 requestData.get("meta_data").toString(), JsonNode.class
             ).elements()
@@ -610,9 +631,34 @@ public class PublicationService {
 		return results.findFirst().orElse(null);
 	}
 
-    private Collection convertIteratorToCollection(Iterator iterator) {
-        return (Collection) StreamSupport.stream(Spliterators.spliteratorUnknownSize(iterator, Spliterator.ORDERED), false)
-        .collect(Collectors.toList());
+    public HashMap<String, Object> setGetFormMetaData(PublicationFormVersion formVersion, Collection<HashMap<String, Object>> forms) throws JsonMappingException, JsonProcessingException {
+        this.hashMapResults = new HashMap<String, Object>();
+
+        String jsonData = this.objectMapper.writeValueAsString(formVersion);
+        
+        this.hashMapResults = this.objectMapper.readValue(jsonData, HashMap.class);
+
+        this.hashMapResults.put("forms", forms);
+
+        return this.hashMapResults;
+    }
+
+    public CopyOnWriteArrayList<HashMap<String, Object>> getFormMetaData(
+        PublicationFormVersion formVersion
+    ) throws JsonMappingException, JsonProcessingException {
+        this.arrayListResults = new CopyOnWriteArrayList<>();
+
+        Collection<PublicationForm> formsCollection = formVersion.getPublicationFormCollection()
+            .stream()
+            .filter(
+                item -> item.isFlagActive()
+            ).toList();
+
+        String jsonData = this.objectMapper.writeValueAsString(formsCollection);
+
+        this.arrayListResults = this.objectMapper.readValue(jsonData, CopyOnWriteArrayList.class);
+
+        return this.arrayListResults;
     }
 
 }

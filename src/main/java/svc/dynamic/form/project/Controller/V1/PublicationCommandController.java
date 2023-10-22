@@ -96,7 +96,7 @@ public class PublicationCommandController {
         } catch (Exception e) {
             this.responseObject.status = 400;
             this.responseObject.info = "error";
-            this.responseObject.message = (uuid == null) ? "Error on create publication data. " + e.getMessage() : "Error on edit publications data by UUID: " + uuid + ".";
+            this.responseObject.message = (uuid == null) ? "Error on create publication data." : "Error on edit publications data by UUID: " + uuid + ".";
         }
 
         return ResponseEntity.status(this.responseObject.status).body(this.responseObject);

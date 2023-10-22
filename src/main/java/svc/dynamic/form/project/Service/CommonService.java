@@ -1,5 +1,11 @@
 package svc.dynamic.form.project.Service;
 
+import static org.slf4j.event.Level.DEBUG;
+import static org.slf4j.event.Level.ERROR;
+import static org.slf4j.event.Level.INFO;
+import static org.slf4j.event.Level.TRACE;
+import static org.slf4j.event.Level.WARN;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -9,14 +15,23 @@ import java.text.Normalizer;
 import java.text.Normalizer.Form;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
+import java.util.Spliterator;
+import java.util.Spliterators;
 import java.util.UUID;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.event.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -58,6 +73,8 @@ public class CommonService {
 	AppProperties appProperties;
 	@Autowired
 	FileStorageProperties fileStorageProperties;
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(CommonService.class);
 
 	private String appRoot;
 	private Path fileStoragePath;
@@ -113,6 +130,62 @@ public class CommonService {
 		return this.fileStoragePath;
 	}
 
+	public void setLogger(Level type, String message) {
+
+		switch (type) {
+
+			case TRACE:
+				this.LOGGER.trace(message);
+				break;
+
+			case DEBUG:
+				this.LOGGER.debug(message);
+				break;
+
+			case ERROR:
+				this.LOGGER.error(message);
+				break;
+
+			case WARN:
+				this.LOGGER.warn(message);
+				break;
+
+			default:
+				this.LOGGER.info(message);
+				break;
+
+			}
+
+	}
+
+	public void setLogger(Level type, String message, Throwable throwable) {
+
+		switch (type) {
+
+			case TRACE:
+				this.LOGGER.trace(message, throwable);
+				break;
+
+			case DEBUG:
+				this.LOGGER.debug(message, throwable);
+				break;
+
+			case ERROR:
+				this.LOGGER.error(message, throwable);
+				break;
+
+			case WARN:
+				this.LOGGER.warn(message, throwable);
+				break;
+
+			default:
+				this.LOGGER.info(message, throwable);
+				break;
+
+			}
+
+	}
+
 	public String slug(String input) {
 		String nowhitespace = WHITESPACE.matcher(input).replaceAll("-");
 		String normalized 	= Normalizer.normalize(nowhitespace, Form.NFD);
@@ -147,6 +220,11 @@ public class CommonService {
 	public String createUUID() {
 		return UUID.randomUUID().toString();
 	}
+
+    public Collection convertIteratorToCollection(Iterator iterator) {
+        return (Collection) StreamSupport.stream(Spliterators.spliteratorUnknownSize(iterator, Spliterator.ORDERED), false)
+        .collect(Collectors.toList());
+    }
 
 	public HashMap<String, Object> uploadFile(MultipartFile file, String parameter, String secondaryUrlPart) throws FileStorageException, IOException {
 		String originalName	= StringUtils.cleanPath(file.getOriginalFilename()); // Already with extension
