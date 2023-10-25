@@ -77,7 +77,7 @@ public class CommonService {
 	@Autowired
 	FileStorageProperties fileStorageProperties;
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(CommonService.class);
+	private final Logger LOGGER = LoggerFactory.getLogger(CommonService.class);
 
 	private String appRoot;
 	private Path fileStoragePath;
