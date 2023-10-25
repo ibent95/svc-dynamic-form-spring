@@ -201,7 +201,51 @@ public class PublicationQueryController {
         try {
             Publication publication                             = this.publicationRepo.findByUuid(publicationUuid);
             PublicationFormVersion formVersion                  = publication.getPublicationFormVersion();
-            CopyOnWriteArrayList<HashMap<String, Object>> formsCollection = this.publicationSvc.getFormMetaDataByPublicationMetaCollection(publication.getPublicationMeta());
+            CopyOnWriteArrayList<HashMap<String, Object>> formsRawCollection = this.publicationSvc.getFormMetaDataByPublicationMetaCollection(publication.getPublicationMeta());
+
+            CopyOnWriteArrayList<HashMap<String, Object>> formsCollection	    = new CopyOnWriteArrayList<HashMap<String, Object>>(
+                formsRawCollection.stream().map((HashMap<String, Object> field) -> {
+                    String[] fieldOptions;
+                    field.put("options", new ArrayList<>());
+
+                    switch (field.get("field_type").toString()) {
+                        case "select":
+                            fieldOptions = field.get("field_options").toString().split("-");
+
+                            // Get options of select from database (Master data or terms of taxonomy)
+                            field.replace("options", (fieldOptions[0].equals("master"))
+                                ? this.publicationFormRepo.findAllMasterData(
+                                    fieldOptions[1],
+                                    null,
+                                    null
+                                )
+                                : null
+                            );
+                            break;
+
+                        case "autoselect":
+                        case "autocomplete":
+                            fieldOptions = field.get("field_options").toString().split("-");
+                            
+                            // Get options of autoselect from database (Master data or terms of taxonomy)
+                            // NEED RECONFIGURE LATER IN CustomPublicationFormRepositoryImpl!!!
+                            field.replace("options", (fieldOptions[0].equals("master"))
+                                ? this.publicationFormRepo.findAllTaxonomyTerms(
+                                    fieldOptions[1],
+                                    null,
+                                    null
+                                )
+                                : null
+                            );
+                            break;
+                        
+                        default: break;
+                    }
+
+                    return field;
+                }).toList()
+            );
+
             Collection<HashMap<String, Object>> forms           = this.dynamicFormSvc.setFields(formsCollection, formVersion.getGridSystem());
 
             HashMap<String, Object> formMetaData                = this.publicationSvc.setGetFormMetaData(formVersion, forms);
