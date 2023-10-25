@@ -1,0 +1,1807 @@
+<!--
+ API Documentation HTML Template  - 1.0.1
+ Copyright © 2016 Florian Nicolas
+ Licensed under the MIT license.
+ https://github.com/ticlekiwi/API-Documentation-HTML-Template
+ !-->
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>API Documentation - svc-dynamic-form-spring</title>
+    <meta name="description" content="">
+    <meta name="author" content="ibent95">
+
+    <meta http-equiv="cleartype" content="on">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="css/hightlightjs-dark.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;1,300&family=Source+Code+Pro:wght@300&display=swap" rel="stylesheet"> 
+    <link rel="stylesheet" href="css/style.css" media="all">
+    <script>hljs.initHighlightingOnLoad();</script>
+</head>
+
+<body>
+<div class="left-menu">
+    <div class="content-logo">
+        <div class="logo">
+            <img alt="platform by Emily van den Heever from the Noun Project" title="platform by Emily van den Heever from the Noun Project" src="images/logo.png" height="32" />
+            <span>API Documentation</span>
+        </div>
+        <button class="burger-menu-icon" id="button-menu-mobile">
+            <svg width="34" height="34" viewBox="0 0 100 100"><path class="line line1" d="M 20,29.000046 H 80.000231 C 80.000231,29.000046 94.498839,28.817352 94.532987,66.711331 94.543142,77.980673 90.966081,81.670246 85.259173,81.668997 79.552261,81.667751 75.000211,74.999942 75.000211,74.999942 L 25.000021,25.000058"></path><path class="line line2" d="M 20,50 H 80"></path><path class="line line3" d="M 20,70.999954 H 80.000231 C 80.000231,70.999954 94.498839,71.182648 94.532987,33.288669 94.543142,22.019327 90.966081,18.329754 85.259173,18.331003 79.552261,18.332249 75.000211,25.000058 75.000211,25.000058 L 25.000021,74.999942"></path></svg>
+        </button>
+    </div>
+    <div class="mobile-menu-closer"></div>
+    <div class="content-menu">
+        <div class="content-infos">
+            <div class="info"><b>Version:</b> 1.0.0</div>
+            <div class="info"><b>Last Updated:</b> 1st Oct, 2023</div>
+        </div>
+        <ul>
+            <li class="scroll-to-link active" data-target="content-introduction">
+                <a>Introduction</a>
+            </li>
+
+            <li class="scroll-to-link" data-target="content-general-apis">
+                <a>General / Main APIs</a>
+            </li>
+
+            <li class="scroll-to-link" data-target="content-general-apis-get-main">
+                <a>1. [GET] Main</a>
+            </li>
+
+            <li class="scroll-to-link" data-target="content-general-apis-get-uploaded-file">
+                <a>2. [GET] Uploaded File</a>
+            </li>
+
+            <li class="scroll-to-link" data-target="content-general-apis-post-upload-file">
+                <a>3. [POST] Upload File</a>
+            </li>
+
+            <li class="scroll-to-link" data-target="content-publications-apis">
+                <a>Publication`s APIs</a>
+            </li>
+
+            <li class="scroll-to-link" data-target="content-publications-apis-get-main">
+                <a>1. [GET] Publication Main</a>
+            </li>
+
+            <li class="scroll-to-link" data-target="content-publications-apis-get-all">
+                <a>2. [GET] All Publication`s</a>
+            </li>
+
+            <li class="scroll-to-link" data-target="content-publications-apis-get-details">
+                <a>3. [GET] Publication Details by PUBLICATION_UUID</a>
+            </li>
+
+            <li class="scroll-to-link" data-target="content-publications-apis-get-form-metadata-publication-type-code">
+                <a>4. [GET] Publication Form Metadata by PUBLICATION_TYPE_CODE</a>
+            </li>
+
+            <li class="scroll-to-link" data-target="content-publications-apis-get-form-metadata-publication-uuid">
+                <a>5. [GET] Publication FORM Metadata by PUBLICATION_UUID</a>
+            </li>
+
+            <li class="scroll-to-link" data-target="content-publications-apis-post-create-publication">
+                <a>6. [POST] Create Publication</a>
+            </li>
+
+            <li class="scroll-to-link" data-target="content-publications-apis-post-update-publication-by-publication-uuid">
+                <a>7. [POST] Update Publication by PUBLICATION_UUID</a>
+            </li>
+
+            <li class="scroll-to-link" data-target="content-publications-apis-delete-remove-publication-by-publication-uuid">
+                <a>8. [DELETE] Remove Publication by PUBLICATION_UUID</a>
+            </li>
+
+            <li class="scroll-to-link" data-target="content-master-data-apis">
+                <a>Master Data APIs</a>
+            </li>
+
+            <li class="scroll-to-link" data-target="content-master-data-apis-get-publication-general-types">
+                <a>1. [GET] Publication General Types</a>
+            </li>
+
+            <li class="scroll-to-link" data-target="content-master-data-apis-get-publication-types">
+                <a>2. [GET] Publication Types</a>
+            </li>
+
+            <li class="scroll-to-link" data-target="content-master-data-apis-get-publication-statuses">
+                <a>3. [GET] Publication Statuses</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="content-page">
+    <div class="content-code"></div>
+    <div class="content">
+
+        <!-- Introduction section -->
+        <div class="overflow-hidden content-section" id="content-introduction">
+            <h1>Introduction</h1>
+            <pre>
+    API Endpoint
+
+        http://127.0.0.1:8080/public
+            </pre>
+            <p>
+                This server-side project is an implementation of Dynamic Forms service using <a href="https://spring.io/projects/spring-boot">Spring Framework - Spring Boot</a> and was generated with <a href="https://start.spring.io">Spring Initializer</a> version 3. And it similar to <a href="https://github.com/ibent95/svc-dynamic-form-symfony">svc-dynamic-form-symfony</a>.
+            </p>
+            <p>
+                This project was created to implement what I found and learned in my previous work at a university in Indonesia. It is something about a database for all lecturer to save their work like publications, research, teaching, and more. The purpose is to make a form that can fill all needed and can rapidly change when necessary, whenever the developer or administrator wants, just make changes in the database and the form can be used immediately. So no more deployment stage is run with this configuration.
+            </p>
+            <p>
+                Also, this is my project to learn and implement more features, libraries, codes, or logic in Java/Spring Framework - Spring Boot.
+            </p>
+            <p>
+                Please get in touch with me at ibent95tuny@gmail for further help or discussion.
+            </p>
+            <p style="font-weight: bold;">
+                [Note]: There is no live demo yet, so please run it manual with <code>mvn spring-boot:run</code> .
+            </p>
+        </div>
+
+        <!-- General APIs section -->
+        <div class="overflow-hidden content-section" id="content-general-apis">
+            <h2>General APIs</h2>
+            <p>There is bunch of API to use in this section. They are used in general puposes.</p>
+        </div>
+
+        <!-- General APIs item 1 -->
+        <div class="overflow-hidden content-section" id="content-general-apis-get-main">
+            <h3>1. [GET] Main</h3>
+
+            <pre><code class="bash">
+# Here is a curl example
+curl \
+-X GET http://127.0.0.1:8080/public/api/v1
+            </code></pre>
+
+            <p>
+                To get messages and date from server, mostly it can be used to check healthz of the service. The API route :<br>
+                <code class="higlighted break-word">http://127.0.0.1:8080/public/api/v1</code>
+            </p>
+
+            <br>
+
+            <pre><code class="json">
+Result example :
+
+{
+    "info": "success",
+    "message": "Welcome to Dynamic Form service with Symfony 6.",
+    "data": {
+        "message": "Welcome to Dynamic Form service with Symfony 6.",
+        "date": "2023-10-01"
+    }
+}
+            </code></pre>
+
+            <h4>QUERY PARAMETERS</h4>
+            <p class="central-overflow-x">No query parameter needed.</p>
+        </div>
+
+        <!-- General APIs item 2 -->
+        <div class="overflow-hidden content-section" id="content-general-apis-get-uploaded-file">
+            <h3>2. [GET] Uploaded File</h3>
+
+            <pre><code class="bash">
+# Here is a curl example
+curl \
+-X GET http://127.0.0.1:8080/public/api/v1/files/:serviceName/:fileNameExtension
+            </code></pre>
+
+            <p>
+                To get temporary uploaded file from temporary table data. It is used to reduce server load when submit dynamic form data, especially with file and image field types in form metadata. The API route :<br>
+                <code class="higlighted break-word">http://127.0.0.1:8080/public/api/v1/files/:serviceName/:fileNameExtension</code>
+            </p>
+
+            <br>
+
+            <pre><code class="binary-response">
+Result example :
+
+Usually it return binary file.
+            </code></pre>
+
+            <h4>QUERY PARAMETERS</h4>
+            <p class="central-overflow-x">No query parameter needed.</p>
+
+            <h4>PATH PARAMETERS</h4>
+            <table class="central-overflow-x">
+                <thead>
+                <tr>
+                    <th>Field</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>:serviceName</td>
+                    <td>String</td>
+                    <td>The service name ('publication', 'reaserch', or others).</td>
+                </tr>
+                <tr>
+                    <td>:fileNameExtension</td>
+                    <td>String</td>
+                    <td>The file name and extension (Exp: example.pdf).</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- General APIs item 3 -->
+        <div class="overflow-hidden content-section" id="content-general-apis-post-upload-file">
+            <h3>3. [POST] Upload File</h3>
+
+            <pre><code class="bash">
+# Here is a curl example
+curl \
+-X POST http://127.0.0.1:8080/public/api/v1/files/upload/:serviceName
+            </code></pre>
+
+            <p>
+                This is upload file API with POST method, it is used to upload file to temporary table data. It return UUID of uploaded file. The API route :<br>
+                <code class="higlighted break-word">http://127.0.0.1:8080/public/api/v1/files/upload/:serviceName</code>
+            </p>
+
+            <br>
+
+            <pre><code class="json">
+Result example :
+
+{
+    "info": "success",
+    "message": "Success on upload file data!",
+    "data": "73b29692-9758-445d-902f-ab663d72fae2"
+}
+            </code></pre>
+
+            <h4>QUERY PARAMETERS</h4>
+            <p class="central-overflow-x">No query parameter needed.</p>
+
+            <h4>PATH PARAMETERS</h4>
+            <table class="central-overflow-x">
+                <thead>
+                <tr>
+                    <th>Field</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>:serviceName</td>
+                    <td>String</td>
+                    <td>The destination service name ('publication', 'reaserch', or others).</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Publication APIs section -->
+        <div class="overflow-hidden content-section" id="content-publications-apis">
+            <h2>Publication`s APIs</h2>
+            <p>This section is a list of API to Publication menu (service). This menu is used to implement Dynamic Forms.</p>
+        </div>
+
+        <!-- Publication`s APIs section item 1 -->
+        <div class="overflow-hidden content-section" id="content-publications-apis-get-main">
+            <h3>1. [GET] Publication Main</h3>
+
+            <pre><code class="bash">
+# Here is a curl example
+curl \
+-X GET http://127.0.0.1:8080/public/api/v1/publication
+            </code></pre>
+
+            <p>
+                To get messages and date from server, mostly it can be used to check healthz of the publication service :<br>
+                <code class="higlighted break-word">http://127.0.0.1:8080/public/api/v1/publication</code>
+            </p>
+
+            <br>
+
+            <pre><code class="json">
+Result example :
+
+{
+    "info": "success",
+    "message": "Success to access the publication`s API!",
+    "data": {
+        "message": "Welcome to publication`s API!",
+        "date": "2023-10-01"
+    }
+}
+            </code></pre>
+
+            <h4>QUERY PARAMETERS</h4>
+            <p class="central-overflow-x">No query parameter needed.</p>
+        </div>
+
+        <!-- Publication`s APIs section item 2 -->
+        <div class="overflow-hidden content-section" id="content-publications-apis-get-all">
+            <h3>2. [GET] All Publication`s</h3>
+
+            <pre><code class="bash">
+# Here is a curl example
+curl \
+-X GET http://127.0.0.1:8080/public/api/v1/publications
+            </code></pre>
+
+            <p>
+                This API is used to get all submited publication`s data. The API route :<br>
+                <code class="higlighted break-word">http://127.0.0.1:8080/public/api/v1/publications</code>
+            </p>
+
+            <br>
+
+            <pre><code class="json">
+Result example :
+
+{
+    "info": "success",
+    "message": "Success to get publications data!",
+    "data": [
+        {
+            "title": "Power Ranger",
+            "publication_date": "2023-10-02 00:58:40",
+            "uuid": "58b1cf1d-673f-4115-891d-0c1532efc5a6",
+            "publication_general_type": {
+                "uuid": "fed02ab7-1f41-472b-b451-a893f0485e33",
+                "publication_general_type_name": "Book",
+                "publication_general_type_code": "BOK"
+            },
+            "publication_type": {
+                "uuid": "a23892cd-6811-44bd-a671-c85b87829887",
+                "publication_type_name": "Book 1",
+                "publication_type_code": "BOK-1",
+                "publication_general_type": {
+                    "uuid": "fed02ab7-1f41-472b-b451-a893f0485e33",
+                    "publication_general_type_name": "Book",
+                    "publication_general_type_code": "BOK"
+                }
+            },
+            "publication_form_version": {
+                "publication_form_version_name": "Book 1 v1",
+                "publication_form_version_code": "BOK1-V1",
+                "grid_system": {
+                    "type": "tailwind",
+                    "cols": 12,
+                    "config": {
+                        "text_1": {
+                            "colspan": 3
+                        },
+                        "select_1": {
+                            "colspan": 3
+                        },
+                        ...
+                    }
+                },
+                "uuid": "d152c092-1141-4640-846d-24a6ef91b646",
+                "flag_active": true
+            },
+            "publication_status": {
+                "publication_status_name": "Draft",
+                "publication_status_code": "DRF",
+                "uuid": "4bc22d41-4386-4f57-bf4d-dd51e993aa1e"
+            }
+        },
+        {
+            "title": "More power beybeh",
+            "publication_date": null,
+            "uuid": "759a8e05-2ddf-4420-b757-2e08c907be00",
+            "publication_general_type": {
+                "uuid": "fed02ab7-1f41-472b-b451-a893f0485e33",
+                "publication_general_type_name": "Book",
+                "publication_general_type_code": "BOK"
+            },
+            "publication_type": {
+                "uuid": "4376fe79-b2bd-4178-bfd4-1ed1664a8f61",
+                "publication_type_name": "Book 2",
+                "publication_type_code": "BOK-2",
+                "publication_general_type": {
+                    "uuid": "fed02ab7-1f41-472b-b451-a893f0485e33",
+                    "publication_general_type_name": "Book",
+                    "publication_general_type_code": "BOK"
+                }
+            },
+            "publication_form_version": {
+                "publication_form_version_name": "Book 2 v1",
+                "publication_form_version_code": "BOK1-V2",
+                "grid_system": {
+                    "type": "tailwind",
+                    "cols": 12,
+                    "config": {
+                        "text_1": {
+                            "colspan": 9
+                        },
+                        "select_1": {
+                            "colspan": 3
+                        }
+                    }
+                },
+                "uuid": "4798da8b-c6a3-4619-b1f1-1770799918c3",
+                "flag_active": true
+            },
+            "publication_status": {
+                "publication_status_name": "Rejected",
+                "publication_status_code": "RJT",
+                "uuid": "c2cb0ee7-a02e-43a6-8fbe-3a5d17254e47"
+            }
+        },
+        {
+            "title": "Public Relations",
+            "publication_date": null,
+            "uuid": "fa9eaece-6a7b-49db-ac2a-f20adbec0890",
+            "publication_general_type": {
+                "uuid": "fed02ab7-1f41-472b-b451-a893f0485e33",
+                "publication_general_type_name": "Book",
+                "publication_general_type_code": "BOK"
+            },
+            "publication_type": {
+                "uuid": "4376fe79-b2bd-4178-bfd4-1ed1664a8f61",
+                "publication_type_name": "Book 2",
+                "publication_type_code": "BOK-2",
+                "publication_general_type": {
+                    "uuid": "fed02ab7-1f41-472b-b451-a893f0485e33",
+                    "publication_general_type_name": "Book",
+                    "publication_general_type_code": "BOK"
+                }
+            },
+            "publication_form_version": {
+                "publication_form_version_name": "Book 2 v1",
+                "publication_form_version_code": "BOK1-V2",
+                "grid_system": {
+                    "type": "tailwind",
+                    "cols": 12,
+                    "config": {
+                        "text_1": {
+                            "colspan": 9
+                        },
+                        "select_1": {
+                            "colspan": 3
+                        }
+                    }
+                },
+                "uuid": "4798da8b-c6a3-4619-b1f1-1770799918c3",
+                "flag_active": true
+            },
+            "publication_status": {
+                "publication_status_name": "Processing",
+                "publication_status_code": "PRO",
+                "uuid": "2c5f13d8-cfbd-4d53-9311-356ca2f33ffd"
+            }
+        }
+    ],
+    "count": 12
+}
+            </code></pre>
+
+            <h4>QUERY PARAMETERS</h4>
+            <table class="central-overflow-x">
+                <thead>
+                    <tr>
+                        <th>Field</th> <th>Type</th> <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>limit</td>
+                        <td>String/Integer</td>
+                        <td>The size or length of retrieved data (Exp: 3).</td>
+                    </tr>
+                    <tr>
+                        <td>offset</td>
+                        <td>String/Integer</td>
+                        <td>(Optional) The offset or index start of retrieved data (Exp: 0).</td>
+                    </tr>
+                    <tr>
+                        <td>page_index</td>
+                        <td>String/Integer</td>
+                        <td>The index of page, it will replace offset variable with (limit * page_index) so the data will start from the offset (Exp: 0).</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Publication`s APIs section item 3 -->
+        <div class="overflow-hidden content-section" id="content-publications-apis-get-details">
+            <h3>3. [GET] Publication Details by PUBLICATION_UUID</h3>
+
+            <pre><code class="bash">
+# Here is a curl example
+curl \
+-X GET http://127.0.0.1:8080/public/api/v1/publications/04ca1413-3961-40ad-b288-d742405d1654
+            </code></pre>
+
+            <p>
+                This is API to get publication details. The API route :<br>
+                <code class="higlighted break-word">http://127.0.0.1:8080/public/api/v1/publications/:publicationUUID</code>
+            </p>
+
+            <br>
+
+            <pre><code class="json">
+Result example :
+
+{
+    "info": "success",
+    "message": "Success to get publication data!",
+    "data": {
+        "title": "Try 01",
+        "publication_date": null,
+        "uuid": "04ca1413-3961-40ad-b288-d742405d1654",
+        "publication_general_type": {
+            "uuid": "fed02ab7-1f41-472b-b451-a893f0485e33",
+            "publication_general_type_name": "Book",
+            "publication_general_type_code": "BOK"
+        },
+        "publication_type": {
+            "uuid": "4376fe79-b2bd-4178-bfd4-1ed1664a8f61",
+            "publication_type_name": "Book 2",
+            "publication_type_code": "BOK-2",
+            "publication_general_type": {
+                "uuid": "fed02ab7-1f41-472b-b451-a893f0485e33",
+                "publication_general_type_name": "Book",
+                "publication_general_type_code": "BOK"
+            }
+        },
+        "publication_form_version": {
+            "publication_form_version_name": "Book 2 v1",
+            "publication_form_version_code": "BOK1-V2",
+            "grid_system": {
+                "type": "tailwind",
+                "cols": 12,
+                "config": {
+                    "text_1": {
+                        "colspan": 9
+                    },
+                    "select_1": {
+                        "colspan": 3
+                    }
+                }
+            },
+            "uuid": "4798da8b-c6a3-4619-b1f1-1770799918c3",
+            "flag_active": true
+        },
+        "publication_status": {
+            "publication_status_name": "Processing",
+            "publication_status_code": "PRO",
+            "uuid": "2c5f13d8-cfbd-4d53-9311-356ca2f33ffd"
+        },
+        "meta_data": [
+            {
+                "field_label": "Try text",
+                "field_type": "text",
+                "field_name": "text_1",
+                "field_id": "text_1",
+                "field_class": "text_1",
+                "field_placeholder": "Try text placeholder",
+                "field_configs": null,
+                "description": "Try text description",
+                "order_position": 1,
+                "validation_configs": null,
+                "error_message": null,
+                "dependency_child": null,
+                "dependency_parent": null,
+                "flag_required": false,
+                "flag_field_form_type": false,
+                "flag_field_title": true,
+                "flag_field_publish_date": false,
+                "value": "Try 01",
+                "other_value": null,
+                "uuid": "8d20d314-6b7f-4400-a888-49a0017a57d1",
+                "field_options": null
+            },
+            {
+                "field_label": "Try select",
+                "field_type": "select",
+                "field_name": "select_1",
+                "field_id": "select_1",
+                "field_class": "select_1",
+                "field_placeholder": "Try select placeholder",
+                "field_configs": null,
+                "description": "Try select description",
+                "order_position": 2,
+                "validation_configs": null,
+                "error_message": null,
+                "dependency_child": null,
+                "dependency_parent": null,
+                "flag_required": false,
+                "flag_field_form_type": true,
+                "flag_field_title": false,
+                "flag_field_publish_date": false,
+                "value": "d3192561-8703-4801-8f34-06283b61fd1c",
+                "other_value": {
+                    "uuid": "d3192561-8703-4801-8f34-06283b61fd1c",
+                    "value": "d3192561-8703-4801-8f34-06283b61fd1c",
+                    "text": "Verified"
+                },
+                "uuid": "52171ab4-a672-4e85-a248-00cd6a9da7e3",
+                "field_options": "master-publication_status"
+            }
+        ]
+    }
+}
+            </code></pre>
+
+            <h4>QUERY PARAMETERS</h4>
+            <p class="central-overflow-x">No query parameter needed.</p>
+
+            <h4>PATH PARAMETERS</h4>
+            <table class="central-overflow-x">
+                <thead>
+                    <tr>
+                        <th>Field</th> <th>Type</th> <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>:publicationUUID</td>
+                        <td>String</td>
+                        <td>The UUID of publication (Exp: 04ca1413-3961-40ad-b288-d742405d1654).</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Publication`s APIs section item 4 -->
+        <div class="overflow-hidden content-section" id="content-publications-apis-get-form-metadata-publication-type-code">
+            <h3>4. [GET] Publication Form Metadata by PUBLICATION_TYPE_CODE</h3>
+
+            <pre><code class="bash">
+# Here is a curl example
+curl \
+-X GET http://127.0.0.1:8080/public/api/v1/publications/form-meta-data/BOK-2
+            </code></pre>
+
+            <p>
+                This API is used to get Form Metadata by Publication Type Code. The API route :<br>
+                <code class="higlighted break-word">http://127.0.0.1:8080/public/api/v1/publications/form-meta-data/:publicationTypeCode</code>
+            </p>
+
+            <br>
+
+            <pre><code class="json">
+Result example :
+
+{
+    "info": "success",
+    "message": "Success to get publication form metadata!",
+    "data": {
+        "publication_form_version_name": "Book 2 v1",
+        "publication_form_version_code": "BOK1-V2",
+        "grid_system": {
+            "type": "tailwind",
+            "cols": 12,
+            "config": {
+                "text_1": {
+                    "colspan": 9
+                },
+                "select_1": {
+                    "colspan": 3
+                }
+            }
+        },
+        "uuid": "4798da8b-c6a3-4619-b1f1-1770799918c3",
+        "flag_active": true,
+        "forms": [
+            {
+                "field_label": "Try text",
+                "field_type": "text",
+                "field_name": "text_1",
+                "field_id": "text_1",
+                "field_class": "text_1",
+                "field_placeholder": "Try text placeholder",
+                "field_configs": {
+                    "colspan": 9
+                },
+                "description": "Try text description",
+                "order_position": 1,
+                "validation_configs": null,
+                "error_message": null,
+                "dependency_child": null,
+                "dependency_parent": null,
+                "flag_required": false,
+                "flag_field_form_type": false,
+                "flag_field_title": true,
+                "flag_field_publish_date": false,
+                "uuid": "37a006a3-2077-4370-9fe1-3a4b12c1074b",
+                "field_options": null,
+                "options": [],
+                "children": [],
+                "flag_multiple_field": false
+            },
+            {
+                "field_label": "Try select",
+                "field_type": "select",
+                "field_name": "select_1",
+                "field_id": "select_1",
+                "field_class": "select_1",
+                "field_placeholder": "Try select placeholder",
+                "field_configs": {
+                    "colspan": 3
+                },
+                "description": "Try select description",
+                "order_position": 2,
+                "validation_configs": null,
+                "error_message": null,
+                "dependency_child": null,
+                "dependency_parent": null,
+                "flag_required": false,
+                "flag_field_form_type": true,
+                "flag_field_title": false,
+                "flag_field_publish_date": false,
+                "uuid": "90256187-caba-436f-bade-0dfd8b4b32b4",
+                "field_options": "master-publication_status",
+                "options": [
+                    {
+                        "publication_status_name": "Draft",
+                        "value": "Draft",
+                        "uuid": "4bc22d41-4386-4f57-bf4d-dd51e993aa1e"
+                    },
+                    {
+                        "publication_status_name": "Processing",
+                        "value": "Processing",
+                        "uuid": "2c5f13d8-cfbd-4d53-9311-356ca2f33ffd"
+                    },
+                    {
+                        "publication_status_name": "Rejected",
+                        "value": "Rejected",
+                        "uuid": "c2cb0ee7-a02e-43a6-8fbe-3a5d17254e47"
+                    },
+                    {
+                        "publication_status_name": "Revision",
+                        "value": "Revision",
+                        "uuid": "e2605a42-63fc-492f-8db8-955a6c7c3944"
+                    },
+                    {
+                        "publication_status_name": "Verified",
+                        "value": "Verified",
+                        "uuid": "d3192561-8703-4801-8f34-06283b61fd1c"
+                    }
+                ],
+                "children": [],
+                "flag_multiple_field": false
+            },
+            {
+                "field_label": "Try file",
+                "field_type": "file",
+                "field_name": "file_1",
+                "field_id": "file_1",
+                "field_class": "file_1",
+                "field_placeholder": "Try file placeholder",
+                "field_configs": null,
+                "description": "Try file description",
+                "order_position": 3,
+                "validation_configs": null,
+                "error_message": "",
+                "dependency_child": null,
+                "dependency_parent": null,
+                "flag_required": true,
+                "flag_field_form_type": false,
+                "flag_field_title": false,
+                "flag_field_publish_date": false,
+                "uuid": "9c1f3601-5f28-4459-a4dd-236dfc540614",
+                "field_options": "",
+                "options": [],
+                "children": [],
+                "flag_multiple_field": false
+            },
+            {
+                "field_label": "Try image",
+                "field_type": "image",
+                "field_name": "image_1",
+                "field_id": "image_1",
+                "field_class": "image_1",
+                "field_placeholder": "Try image placeholder",
+                "field_configs": null,
+                "description": "Try image description",
+                "order_position": 4,
+                "validation_configs": null,
+                "error_message": "",
+                "dependency_child": null,
+                "dependency_parent": null,
+                "flag_required": true,
+                "flag_field_form_type": false,
+                "flag_field_title": false,
+                "flag_field_publish_date": false,
+                "uuid": "ac452185-b05a-428b-84fc-e3479e47612d",
+                "field_options": "",
+                "options": [],
+                "children": [],
+                "flag_multiple_field": false
+            }
+        ]
+    }
+}
+            </code></pre>
+
+            <h4>QUERY PARAMETERS</h4>
+            <p class="central-overflow-x">No query parameter needed.</p>
+
+            <h4>PATH PARAMETERS</h4>
+            <table class="central-overflow-x">
+                <thead>
+                    <tr>
+                        <th>Field</th> <th>Type</th> <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>:publicationTypeCode</td>
+                        <td>String</td>
+                        <td>The CODE of Publication Type (Exp: BOK-2).</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Publication`s APIs section item 5 -->
+        <div class="overflow-hidden content-section" id="content-publications-apis-get-form-metadata-publication-uuid">
+            <h3>5. [GET] Publication FORM Metadata By PUBLICATION_UUID</h3>
+
+            <pre><code class="bash">
+# Here is a curl example
+curl \
+-X GET http://127.0.0.1:8080/public/api/v1/publications/58b1cf1d-673f-4115-891d-0c1532efc5a6/form-meta-data
+            </code></pre>
+
+            <p>
+                This API is used to get Form Metadata by Publication UUID, usually is used when submited publication is in update form. The API route:<br>
+                <code class="higlighted break-word">http://127.0.0.1:8080/public/api/v1/publications/:publicationUUID/form-meta-data</code>
+            </p>
+
+            <br>
+
+            <pre><code class="json">
+Result example :
+
+{
+    "info": "success",
+    "message": "Success to get publication form metadata!",
+    "data": {
+        "publication_form_version_name": "Book 1 v1",
+        "publication_form_version_code": "BOK1-V1",
+        "uuid": "d152c092-1141-4640-846d-24a6ef91b646",
+        "grid_system": {
+            "type": "tailwind",
+            "cols": 12,
+            "config": {
+                "text_1": {
+                    "colspan": 3
+                },
+                "select_1": {
+                    "colspan": 3
+                },
+                ...
+            }
+        },
+        "flag_active": true,
+        "forms": [
+            {
+                "field_label": "Try text",
+                "field_type": "text",
+                "field_name": "text_1",
+                "field_id": "text_1",
+                "field_class": "text_1",
+                "field_placeholder": "Try text placeholder",
+                "field_configs": {
+                    "colspan": 3
+                },
+                "description": "Try text description",
+                "order_position": 1,
+                "validation_configs": null,
+                "error_message": null,
+                "dependency_child": null,
+                "dependency_parent": null,
+                "flag_required": true,
+                "flag_field_form_type": false,
+                "flag_field_title": true,
+                "flag_field_publish_date": false,
+                "value": "Power Ranger",
+                "other_value": null,
+                "uuid": "a77fd158-2933-431c-ba96-deff625fa8e5",
+                "field_options": null,
+                "options": [],
+                "children": [],
+                "flag_multiple_field": false
+            },
+            {
+                "field_label": "Try select",
+                "field_type": "select",
+                "field_name": "select_1",
+                "field_id": "select_1",
+                "field_class": "select_1",
+                "field_placeholder": "Try select placeholder",
+                "field_configs": {
+                    "colspan": 3
+                },
+                "description": "Try select description",
+                "order_position": 2,
+                "validation_configs": null,
+                "error_message": null,
+                "dependency_child": null,
+                "dependency_parent": null,
+                "flag_required": false,
+                "flag_field_form_type": false,
+                "flag_field_title": false,
+                "flag_field_publish_date": false,
+                "value": "",
+                "other_value": {
+                    "uuid": "",
+                    "value": "",
+                    "text": ""
+                },
+                "uuid": "5e128344-30b5-4226-bca7-8b31336c1274",
+                "field_options": "master-publication_status",
+                "options": [
+                    {
+                        "publication_status_name": "Draft",
+                        "value": "Draft",
+                        "uuid": "4bc22d41-4386-4f57-bf4d-dd51e993aa1e"
+                    },
+                    {
+                        "publication_status_name": "Processing",
+                        "value": "Processing",
+                        "uuid": "2c5f13d8-cfbd-4d53-9311-356ca2f33ffd"
+                    },
+                    {
+                        "publication_status_name": "Rejected",
+                        "value": "Rejected",
+                        "uuid": "c2cb0ee7-a02e-43a6-8fbe-3a5d17254e47"
+                    },
+                    {
+                        "publication_status_name": "Revision",
+                        "value": "Revision",
+                        "uuid": "e2605a42-63fc-492f-8db8-955a6c7c3944"
+                    },
+                    {
+                        "publication_status_name": "Verified",
+                        "value": "Verified",
+                        "uuid": "d3192561-8703-4801-8f34-06283b61fd1c"
+                    }
+                ],
+                "children": [],
+                "flag_multiple_field": false
+            },
+            {
+                "field_label": "Try stepper",
+                "field_type": "stepper",
+                "field_name": null,
+                "field_id": "try_stepper_1",
+                "field_class": "try_stepper_1",
+                "field_placeholder": null,
+                "field_configs": {
+                    "orientation": "horizontal",
+                    "linear": true,
+                    "colspan": 6,
+                    "rowspan": 6
+                },
+                "description": null,
+                "order_position": 3,
+                "validation_configs": null,
+                "error_message": null,
+                "dependency_child": null,
+                "dependency_parent": null,
+                "flag_required": false,
+                "flag_field_form_type": false,
+                "flag_field_title": false,
+                "flag_field_publish_date": false,
+                "value": null,
+                "other_value": null,
+                "uuid": "020a8605-a0ec-4a8a-83bf-38332a1b71b9",
+                "field_options": null,
+                "options": [],
+                "children": [
+                    {
+                        "field_label": "Try step 1",
+                        "field_type": "step",
+                        "field_name": null,
+                        "field_id": "try_stepper_1_step_1",
+                        "field_class": "try_stepper_1_step_1",
+                        "field_placeholder": null,
+                        "field_configs": {
+                            "colspan": 12
+                        },
+                        "description": null,
+                        "order_position": 4,
+                        "validation_configs": null,
+                        "error_message": null,
+                        "dependency_child": null,
+                        "dependency_parent": null,
+                        "flag_required": false,
+                        "flag_field_form_type": false,
+                        "flag_field_title": false,
+                        "flag_field_publish_date": false,
+                        "value": null,
+                        "other_value": null,
+                        "uuid": "da092fbd-1657-4650-8554-cd9b880d8729",
+                        "field_options": null,
+                        "options": [],
+                        "children": [
+                            {
+                                "field_label": "Try owl date in stepper",
+                                "field_type": "owl-date",
+                                "field_name": "date_2",
+                                "field_id": "date_2",
+                                "field_class": "date_2",
+                                "field_placeholder": "Try owl date in stepper placeholder",
+                                "field_configs": {
+                                    "colspan": 6
+                                },
+                                "description": "Try owl date in stepper description",
+                                "order_position": 31,
+                                "validation_configs": null,
+                                "error_message": null,
+                                "dependency_child": null,
+                                "dependency_parent": null,
+                                "flag_required": true,
+                                "flag_field_form_type": false,
+                                "flag_field_title": false,
+                                "flag_field_publish_date": false,
+                                "value": "2023-10-07 00:00:00",
+                                "other_value": {
+                                    "value": null,
+                                    "text": null
+                                },
+                                "uuid": "1fc175b5-bf28-44c5-b8ac-af46ce0f478a",
+                                "field_options": null,
+                                "options": [],
+                                "children": [],
+                                "flag_multiple_field": false
+                            },
+                            ...
+                        ],
+                        "flag_multiple_field": false
+                    },
+                    ...
+                ],
+                "flag_multiple_field": false
+            },
+            {
+                "field_label": "URL of dynamic-form blog",
+                "field_type": "url",
+                "field_name": "url_2",
+                "field_id": "url_2",
+                "field_class": "url_2",
+                "field_placeholder": "Try url placeholder",
+                "field_configs": {
+                    "colspan": 6
+                },
+                "description": "Try url description",
+                "order_position": 14,
+                "validation_configs": {
+                    "pattern": "^(https?:\\/\\/(?:www\\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\\.[^\\s]{2,}|www\\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\\.[^\\s]{2,}|https?:\\/\\/(?:www\\.|(?!www))[a-zA-Z0-9]+\\.[^\\s]{2,}|www\\.[a-zA-Z0-9]+\\.[^\\s]{2,})"
+                },
+                "error_message": "Fill in the field with valid url (Example: https://www.dynamic-form.local)",
+                "dependency_child": null,
+                "dependency_parent": null,
+                "flag_required": true,
+                "flag_field_form_type": false,
+                "flag_field_title": false,
+                "flag_field_publish_date": false,
+                "value": "",
+                "other_value": null,
+                "uuid": "fad1676c-a462-4b68-b489-09a976e69ec8",
+                "field_options": null,
+                "options": [],
+                "children": [],
+                "flag_multiple_field": false
+            },
+            ...,
+            {
+                "field_label": "Try accordion",
+                "field_type": "accordion",
+                "field_name": null,
+                "field_id": "try_accordion_1",
+                "field_class": "try_accordion_1",
+                "field_placeholder": null,
+                "field_configs": {
+                    "orientation": "horizontal",
+                    "linear": true,
+                    "colspan": 6,
+                    "rowspan": 5
+                },
+                "description": "",
+                "order_position": 16,
+                "validation_configs": null,
+                "error_message": null,
+                "dependency_child": null,
+                "dependency_parent": null,
+                "flag_required": false,
+                "flag_field_form_type": false,
+                "flag_field_title": false,
+                "flag_field_publish_date": false,
+                "value": null,
+                "other_value": null,
+                "uuid": "adffccbf-97d5-40d7-98fb-aeec4544a940",
+                "field_options": null,
+                "options": [],
+                "children": [
+                    {
+                        "field_label": "Try panel 1",
+                        "field_type": "panel",
+                        "field_name": null,
+                        "field_id": "try_accordion_1_panel_1",
+                        "field_class": "try_accordion_1_panel_1",
+                        "field_placeholder": null,
+                        "field_configs": {
+                            "panel_description": {
+                                "mat_icon": "signal_cellular_alt"
+                            },
+                            "colspan": 12
+                        },
+                        "description": "Panel 1 description",
+                        "order_position": 18,
+                        "validation_configs": null,
+                        "error_message": null,
+                        "dependency_child": null,
+                        "dependency_parent": null,
+                        "flag_required": false,
+                        "flag_field_form_type": false,
+                        "flag_field_title": false,
+                        "flag_field_publish_date": false,
+                        "value": null,
+                        "other_value": null,
+                        "uuid": "79508500-87bb-43a7-a53f-56d0ffc4482c",
+                        "field_options": null,
+                        "options": [],
+                        "children": [
+                            {
+                                "field_label": "Try text in accordion",
+                                "field_type": "text",
+                                "field_name": "text_3",
+                                "field_id": "text_3",
+                                "field_class": "text_3",
+                                "field_placeholder": "Try text in stepper placeholder",
+                                "field_configs": {
+                                    "colspan": 4
+                                },
+                                "description": "Try text in stepper description",
+                                "order_position": 21,
+                                "validation_configs": null,
+                                "error_message": null,
+                                "dependency_child": null,
+                                "dependency_parent": null,
+                                "flag_required": true,
+                                "flag_field_form_type": false,
+                                "flag_field_title": false,
+                                "flag_field_publish_date": false,
+                                "value": "",
+                                "other_value": null,
+                                "uuid": "da11fca0-b9e7-4c32-8618-ea29799bcc85",
+                                "field_options": null,
+                                "options": [],
+                                "children": [],
+                                "flag_multiple_field": false
+                            },
+                            ...
+                        ],
+                        "flag_multiple_field": false
+                    },
+                    ...
+                ],
+                "flag_multiple_field": false
+            },
+            {
+                "field_label": "Try file",
+                "field_type": "file-upload",
+                "field_name": "file_1",
+                "field_id": "file_1",
+                "field_class": "file_1",
+                "field_placeholder": "Try file placeholder",
+                "field_configs": {
+                    "colspan": 6
+                },
+                "description": "Try file description",
+                "order_position": 39,
+                "validation_configs": null,
+                "error_message": null,
+                "dependency_child": null,
+                "dependency_parent": null,
+                "flag_required": true,
+                "flag_field_form_type": false,
+                "flag_field_title": false,
+                "flag_field_publish_date": false,
+                "value": "lwin2020.pdf",
+                "other_value": {
+                    "original_name": "lwin2020.pdf",
+                    "slug": "lwin2020",
+                    "name": "lwin2020-6519b38599aff.pdf",
+                    "path": "files/publications/lwin2020-6519b38599aff.pdf",
+                    "url": "https://svc-dynamic-form-symfony.loc/api/v1/files/publications/lwin2020-6519b38599aff.pdf",
+                    "extension": ".pdf"
+                },
+                "uuid": "5429c7bd-2b31-4bf2-ad21-caa4ede82d24",
+                "field_options": null,
+                "options": [],
+                "children": [],
+                "flag_multiple_field": false
+            },
+            {
+                "field_label": "Try image",
+                "field_type": "image-upload",
+                "field_name": "image_1",
+                "field_id": "image_1",
+                "field_class": "image_1",
+                "field_placeholder": "Try image placeholder",
+                "field_configs": {
+                    "colspan": 6
+                },
+                "description": "Try image description",
+                "order_position": 40,
+                "validation_configs": null,
+                "error_message": null,
+                "dependency_child": null,
+                "dependency_parent": null,
+                "flag_required": true,
+                "flag_field_form_type": false,
+                "flag_field_title": false,
+                "flag_field_publish_date": false,
+                "value": "1.1.png",
+                "other_value": {
+                    "original_name": "1.1.png",
+                    "slug": "1-1",
+                    "name": "1-1-6519b395ea8e1.png",
+                    "path": "files/publications/1-1-6519b395ea8e1.png",
+                    "url": "https://svc-dynamic-form-symfony.loc/api/v1/files/publications/1-1-6519b395ea8e1.png",
+                    "extension": ".png"
+                },
+                "uuid": "0ca55c2d-7e62-4a77-92d4-5d6e288cefb9",
+                "field_options": null,
+                "options": [],
+                "children": [],
+                "flag_multiple_field": false
+            },
+            ...
+        ]
+    }
+}
+            </code></pre>
+
+            <h4>QUERY PARAMETERS</h4>
+            <p class="central-overflow-x">No query parameter needed.</p>
+
+            <h4>PATH PARAMETERS</h4>
+            <table class="central-overflow-x">
+                <thead>
+                    <tr>
+                        <th>Field</th> <th>Type</th> <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>:publicationUUID</td>
+                        <td>String</td>
+                        <td>The UUID of publication (Exp: 58b1cf1d-673f-4115-891d-0c1532efc5a6).</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Publication`s APIs section item 6 -->
+        <div class="overflow-hidden content-section" id="content-publications-apis-post-create-publication">
+            <h3>6. [POST] Create Publication</h3>
+
+            <pre><code class="bash">
+# Here is a curl example
+curl \
+-X POST http://127.0.0.1:8080/public/api/v1/publications
+            </code></pre>
+
+            <p>
+                This API is used to get Form Metadata by Publication UUID, usually is used when submited publication is in update form. The API route:<br>
+                <code class="higlighted break-word">http://127.0.0.1:8080/public/api/v1/publications</code>
+            </p>
+
+            <br>
+
+            <pre><code class="json">
+Result example :
+
+{
+    "info": "success",
+    "message": "Success on save publication data!",
+    "data": []
+}
+            </code></pre>
+
+            <h4>QUERY PARAMETERS</h4>
+            <p class="central-overflow-x">No query parameter needed.</p>
+
+            <h4>BODY - form-data</h4>
+            <table class="central-overflow-x">
+                <thead>
+                    <tr>
+                        <th>Field</th> <th>Type</th> <th>Example Value</th> <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>publication_type_code</td>
+                        <td>String</td>
+                        <td>BOK-2</td>
+                        <td>The CODE of publication type.</td>
+                    </tr>
+                    <tr>
+                        <td>publication_status_code</td>
+                        <td>String</td>
+                        <td>DRF</td>
+                        <td>The CODE of publication status.</td>
+                    </tr>
+                    <tr>
+                        <td>meta_data</td>
+                        <td>Array</td>
+                        <td></td>
+                        <td>The array of inputs, all fields with available of name in it. There is an index number in it to wrap the group of data (value, other_value, field_name, uuid, etc).</td>
+                    </tr>
+                    <tr>
+                        <td>meta_data[0][value]</td>
+                        <td>String</td>
+                        <td>ABC</td>
+                        <td>The value of first input.</td>
+                    </tr>
+                    <tr>
+                        <td>meta_data[0][field_name]</td>
+                        <td>String</td>
+                        <td>text_1</td>
+                        <td>The name of first input.</td>
+                    </tr>
+                    <tr>
+                        <td>meta_data[0][uuid]</td>
+                        <td>String</td>
+                        <td>37a006a3-2077-4370-9fe1-3a4b12c1074b</td>
+                        <td>The UUID of first field metadata in Forms.</td>
+                    </tr>
+                    <tr>
+                        <td>meta_data[1][value]</td>
+                        <td>String</td>
+                        <td>4bc22d41-4386-4f57-bf4d-dd51e993aa1e</td>
+                        <td>The value of second input. If it is select, the value is the ID/UUID of selected options.</td>
+                    </tr>
+                    <tr>
+                        <td>meta_data[1][other_value][uuid]</td>
+                        <td>String</td>
+                        <td>4bc22d41-4386-4f57-bf4d-dd51e993aa1e</td>
+                        <td>The other value of second input. If it is select, the property uuid is the ID/UUID of selected options.</td>
+                    </tr>
+                    <tr>
+                        <td>meta_data[1][other_value][value]</td>
+                        <td>String</td>
+                        <td>4bc22d41-4386-4f57-bf4d-dd51e993aa1e</td>
+                        <td>The other value of second input. If it is select, the property uuid is the ID/UUID of selected options.</td>
+                    </tr>
+                    <tr>
+                        <td>meta_data[1][other_value][text]</td>
+                        <td>String</td>
+                        <td>Draft</td>
+                        <td>The other value of second input. If it is select, the property text is the shown text of selected options.</td>
+                    </tr>
+                    <tr>
+                        <td>meta_data[1][field_name]</td>
+                        <td>String</td>
+                        <td>select_1</td>
+                        <td>The name of second input.</td>
+                    </tr>
+                    <tr>
+                        <td>meta_data[1][uuid]</td>
+                        <td>String</td>
+                        <td>9c1f3601-5f28-4459-a4dd-236dfc540614</td>
+                        <td>The UUID of second field metadata in Forms.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Publication`s APIs section item 7 -->
+        <div class="overflow-hidden content-section" id="content-publications-apis-post-update-publication-by-publication-uuid">
+            <h3>7. [POST] UPDATE Publication by PUBLICATION_UUID</h3>
+
+            <pre><code class="bash">
+# Here is a curl example
+curl \
+-X POST http://127.0.0.1:8080/public/api/v1/publications/e4c856a0-7351-4868-a92a-adfe94040f56
+            </code></pre>
+
+            <p>
+                This API is used to get Form Metadata by Publication UUID, usually is used when submited publication is in update form. The API route:<br>
+                <code class="higlighted break-word">http://127.0.0.1:8080/public/api/v1/publications/:publicationUUID</code>
+            </p>
+
+            <br>
+
+            <pre><code class="json">
+Result example :
+
+{
+    "info": "success",
+    "message": "Success on save publication data!",
+    "data": []
+}
+            </code></pre>
+
+            <h4>QUERY PARAMETERS</h4>
+            <p class="central-overflow-x">No query parameter needed.</p>
+
+            <h4>PATH PARAMETERS</h4>
+            <table class="central-overflow-x">
+                <thead>
+                    <tr>
+                        <th>Field</th> <th>Type</th> <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>:publicationUUID</td>
+                        <td>String</td>
+                        <td>The UUID of publication (Exp: e4c856a0-7351-4868-a92a-adfe94040f56).</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>BODY - form-data</h4>
+            <table class="central-overflow-x">
+                <thead>
+                    <tr>
+                        <th>Field</th> <th>Type</th> <th>Example Value</th> <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>publication_type_code</td>
+                        <td>String</td>
+                        <td>BOK-2</td>
+                        <td>The CODE of publication type.</td>
+                    </tr>
+                    <tr>
+                        <td>publication_status_code</td>
+                        <td>String</td>
+                        <td>PRO</td>
+                        <td>The CODE of publication status.</td>
+                    </tr>
+                    <tr>
+                        <td>meta_data</td>
+                        <td>Array</td>
+                        <td></td>
+                        <td>The array of inputs, all fields with available of name in it. There is an index number in it to wrap the group of data (value, other_value, field_name, uuid, etc).</td>
+                    </tr>
+                    <tr>
+                        <td>meta_data[0][value]</td>
+                        <td>String</td>
+                        <td>ABC</td>
+                        <td>The value of first input.</td>
+                    </tr>
+                    <tr>
+                        <td>meta_data[0][field_name]</td>
+                        <td>String</td>
+                        <td>text_1</td>
+                        <td>The name of first input.</td>
+                    </tr>
+                    <tr>
+                        <td>meta_data[0][uuid]</td>
+                        <td>String</td>
+                        <td>37a006a3-2077-4370-9fe1-3a4b12c1074b</td>
+                        <td>The UUID of first field metadata in Forms.</td>
+                    </tr>
+                    <tr>
+                        <td>meta_data[1][value]</td>
+                        <td>String</td>
+                        <td>4bc22d41-4386-4f57-bf4d-dd51e993aa1e</td>
+                        <td>The value of second input. If it is select, the value is the ID/UUID of selected options.</td>
+                    </tr>
+                    <tr>
+                        <td>meta_data[1][other_value][uuid]</td>
+                        <td>String</td>
+                        <td>4bc22d41-4386-4f57-bf4d-dd51e993aa1e</td>
+                        <td>The other value of second input. If it is select, the property uuid is the ID/UUID of selected options.</td>
+                    </tr>
+                    <tr>
+                        <td>meta_data[1][other_value][value]</td>
+                        <td>String</td>
+                        <td>4bc22d41-4386-4f57-bf4d-dd51e993aa1e</td>
+                        <td>The other value of second input. If it is select, the property uuid is the ID/UUID of selected options.</td>
+                    </tr>
+                    <tr>
+                        <td>meta_data[1][other_value][text]</td>
+                        <td>String</td>
+                        <td>Draft</td>
+                        <td>The other value of second input. If it is select, the property text is the shown text of selected options.</td>
+                    </tr>
+                    <tr>
+                        <td>meta_data[1][field_name]</td>
+                        <td>String</td>
+                        <td>select_1</td>
+                        <td>The name of second input.</td>
+                    </tr>
+                    <tr>
+                        <td>meta_data[1][uuid]</td>
+                        <td>String</td>
+                        <td>9c1f3601-5f28-4459-a4dd-236dfc540614</td>
+                        <td>The UUID of second field metadata in Forms.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Publication`s APIs section item 7 -->
+        <div class="overflow-hidden content-section" id="content-publications-apis-delete-remove-publication-by-publication-uuid">
+            <h3>8. [DELETE] Remove Publication by PUBLICATION_UUID</h3>
+
+            <pre><code class="bash">
+# Here is a curl example
+curl \
+-X DELETE http://127.0.0.1:8080/public/api/v1/publications/368d2e69-52db-4761-a434-350940f63aea
+            </code></pre>
+
+            <p>
+                This API is used to remove publication by Publication UUID. The API route:<br>
+                <code class="higlighted break-word">http://127.0.0.1:8080/public/api/v1/publications/:publicationUUID</code>
+            </p>
+
+            <br>
+
+            <pre><code class="json">
+Result example :
+
+{
+    "info": "success",
+    "message": "Success on delete publication data!",
+    "data": []
+}
+            </code></pre>
+
+            <h4>QUERY PARAMETERS</h4>
+            <p class="central-overflow-x">No query parameter needed.</p>
+
+            <h4>PATH PARAMETERS</h4>
+            <table class="central-overflow-x">
+                <thead>
+                    <tr>
+                        <th>Field</th> <th>Type</th> <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>:publicationUUID</td>
+                        <td>String</td>
+                        <td>The UUID of publication (Exp: e4c856a0-7351-4868-a92a-adfe94040f56).</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Master data APIs section -->
+        <div class="overflow-hidden content-section" id="content-master-data-apis">
+            <h2>Master Data APIs</h2>
+            <p>
+                The Westeros API uses the following error codes:
+            </p>
+            <table>
+                <thead>
+                <tr>
+                    <th>Error Code</th>
+                    <th>Meaning</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>X000</td>
+                    <td>
+                        Some parameters are missing. This error appears when you don't pass every mandatory parameters.
+                    </td>
+                </tr>
+                <tr>
+                    <td>X001</td>
+                    <td>
+                        Unknown or unvalid <code class="higlighted">secret_key</code>. This error appears if you use an unknow API key or if your API key exp:red.
+                    </td>
+                </tr>
+                <tr>
+                    <td>X002</td>
+                    <td>
+                        Unvalid <code class="higlighted">secret_key</code> for this domain. This error appears if you use an  API key non specified for your domain. Developper or Universal API keys doesn't have domain checker.
+                    </td>
+                </tr>
+                <tr>
+                    <td>X003</td>
+                    <td>
+                        Unknown or unvalid user <code class="higlighted">token</code>. This error appears if you use an unknow user <code class="higlighted">token</code> or if the user <code class="higlighted">token</code> exp:red.
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Master data APIs item 1 -->
+        <div class="overflow-hidden content-section" id="content-master-data-apis-get-publication-general-types">
+            <h3>1. [GET] Publication General Types</h3>
+
+            <pre><code class="bash">
+# Here is a curl example
+curl \
+-X GET http://127.0.0.1:8080/public/api/v1/master/publication-general-types
+            </code></pre>
+
+            <p>
+                To get master data of Publication General Types. The API route :<br>
+                <code class="higlighted break-word">http://127.0.0.1:8080/public/api/v1/master/publication-general-types</code>
+            </p>
+
+            <br>
+
+            <pre><code class="json">
+Result example :
+
+{
+    "info": "success",
+    "message": "Success to get master data of publication general types!",
+    "data": [
+        {
+            "uuid": "fed02ab7-1f41-472b-b451-a893f0485e33",
+            "publication_general_type_name": "Book",
+            "publication_general_type_code": "BOK"
+        },
+        {
+            "uuid": "91aa58b3-46fa-4ae2-bac8-b2eda520fd09",
+            "publication_general_type_name": "Journal",
+            "publication_general_type_code": "JUR"
+        },
+        {
+            "uuid": "5bb3a2b0-d603-4bec-bc53-0e35d0034ae2",
+            "publication_general_type_name": "Proceedings",
+            "publication_general_type_code": "PRO"
+        }
+    ]
+}
+            </code></pre>
+
+            <h4>QUERY PARAMETERS</h4>
+            <p class="central-overflow-x">No query parameter needed.</p>
+        </div>
+
+        <!-- Master data APIs item 2 -->
+        <div class="overflow-hidden content-section" id="content-master-data-apis-get-publication-types">
+            <h3>2. [GET] Publication Types</h3>
+
+            <pre><code class="bash">
+# Here is a curl example
+curl \
+-X GET http://127.0.0.1:8080/public/api/v1/master/publication-types
+            </code></pre>
+
+            <p>
+                To get master data of Publication Types. The API route :<br>
+                <code class="higlighted break-word">http://127.0.0.1:8080/public/api/v1/master/publication-types</code>
+            </p>
+
+            <br>
+
+            <pre><code class="json">
+Result example :
+
+{
+    "info": "success",
+    "message": "Success to get master data of publication types!",
+    "data": [
+        {
+            "uuid": "a23892cd-6811-44bd-a671-c85b87829887",
+            "publication_type_name": "Book 1",
+            "publication_type_code": "BOK-1",
+            "publication_general_type": {
+                "uuid": "fed02ab7-1f41-472b-b451-a893f0485e33",
+                "publication_general_type_name": "Book",
+                "publication_general_type_code": "BOK"
+            }
+        },
+        {
+            "uuid": "4376fe79-b2bd-4178-bfd4-1ed1664a8f61",
+            "publication_type_name": "Book 2",
+            "publication_type_code": "BOK-2",
+            "publication_general_type": {
+                "uuid": "fed02ab7-1f41-472b-b451-a893f0485e33",
+                "publication_general_type_name": "Book",
+                "publication_general_type_code": "BOK"
+            }
+        },
+        {
+            "uuid": "4a12ddec-3183-4e12-ba34-7cd8c9771933",
+            "publication_type_name": "Journal 1",
+            "publication_type_code": "JUR-1",
+            "publication_general_type": {
+                "uuid": "91aa58b3-46fa-4ae2-bac8-b2eda520fd09",
+                "publication_general_type_name": "Journal",
+                "publication_general_type_code": "JUR"
+            }
+        }
+    ]
+}
+            </code></pre>
+
+            <h4>QUERY PARAMETERS</h4>
+            <p class="central-overflow-x">No query parameter needed.</p>
+        </div>
+
+        <!-- Master data APIs item 3 -->
+        <div class="overflow-hidden content-section" id="content-master-data-apis-get-publication-statuses">
+            <h3>3. [GET] Publication Statuses</h3>
+
+            <pre><code class="bash">
+# Here is a curl example
+curl \
+-X GET http://127.0.0.1:8080/public/api/v1/master/publication-statuses
+            </code></pre>
+
+            <p>
+                To get master data of Publication Statuses. The API route :<br>
+                <code class="higlighted break-word">http://127.0.0.1:8080/public/api/v1/master/publication-statuses</code>
+            </p>
+
+            <br>
+
+            <pre><code class="json">
+Result example :
+
+{
+    "info": "success",
+    "message": "Success to get master data of publication statuses!",
+    "data": [
+        {
+            "publication_status_name": "Draft",
+            "publication_status_code": "DRF",
+            "uuid": "4bc22d41-4386-4f57-bf4d-dd51e993aa1e"
+        },
+        {
+            "publication_status_name": "Processing",
+            "publication_status_code": "PRO",
+            "uuid": "2c5f13d8-cfbd-4d53-9311-356ca2f33ffd"
+        },
+        {
+            "publication_status_name": "Verified",
+            "publication_status_code": "VRF",
+            "uuid": "d3192561-8703-4801-8f34-06283b61fd1c"
+        },
+        {
+            "publication_status_name": "Rejected",
+            "publication_status_code": "RJT",
+            "uuid": "c2cb0ee7-a02e-43a6-8fbe-3a5d17254e47"
+        },
+        {
+            "publication_status_name": "Revision",
+            "publication_status_code": "RVS",
+            "uuid": "e2605a42-63fc-492f-8db8-955a6c7c3944"
+        }
+    ]
+}
+            </code></pre>
+
+            <h4>QUERY PARAMETERS</h4>
+            <p class="central-overflow-x">No query parameter needed.</p>
+        </div>
+
+    </div>
+
+    <div class="content-code"></div>
+
+    <p class="content-footer">
+        Copyright 2022, made by <a href="https://github.com/ibent95">ibent95</a>.
+        Thanks to <a href="https://github.com/ticlekiwi">ticlekiwi</a>,
+        for the <a href="https://github.com/ticlekiwi/API-Documentation-HTML-Template">API Documentation Template</a>
+    </p>
+</div>
+
+<!-- Github Corner Ribbon - to remove (Ribbon created with : http://tholman.com/github-corners/ )-->
+<a href="https://github.com/ibent95/svc-dynamic-form-symfony" class="github-corner" aria-label="View source on Github" title="View source on Github"><svg width="80" height="80" viewBox="0 0 250 250" style="z-index:99999; fill:#70B7FD; color:#fff; position: fixed; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}@media only screen and (max-width:680px){ .github-corner > svg { right: auto!important; left: 0!important; transform: rotate(270deg)!important;}}</style>
+<!-- END Github Corner Ribbon - to remove -->
+
+<script src="js/script.js"></script>
+</body>
+</html>
