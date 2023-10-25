@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.1.4</version>
+        <version>3.1.5</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>svc.dynamic.form</groupId>
@@ -29,6 +29,9 @@
     </properties>
 
     <dependencies>
+        <!--
+            ~~(org.springframework.boot:spring-boot-starter-actuator failed. Unable to download metadata. Tried repositories: https://repo.maven.apache.org/maven2: java.net.SocketTimeoutException: Connect timed out)~~>
+        -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
@@ -112,6 +115,12 @@
             <groupId>io.hypersistence</groupId>
             <artifactId>hypersistence-utils-hibernate-62</artifactId>
             <version>3.5.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-text</artifactId>
+            <version>1.10.0</version>
         </dependency>
     </dependencies>
 
