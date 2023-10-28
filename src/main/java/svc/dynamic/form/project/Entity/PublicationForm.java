@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.hibernate.annotations.Type;
+import org.hibernate.annotations.Where;
+import org.hibernate.annotations.WhereJoinTable;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -71,12 +73,15 @@ public class PublicationForm implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
+    @JsonIgnore
     private Long id;
 
 	@Column(name = "id_form_version", nullable = false, insertable = false, updatable = false)
+    @JsonIgnore
 	private Long idFormVersion;
 
-    @Column(name = "id_form_parent", insertable = true, updatable = true)
+    @Column(name = "id_form_parent", insertable = false, updatable = false)
+    @JsonIgnore
     private Long idFormParent;
 
     @Column(name = "field_label")
@@ -169,10 +174,21 @@ public class PublicationForm implements Serializable {
     @JsonManagedReference
     private Collection<PublicationMeta> publicationMetaCollection;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(cascade = CascadeType.ALL, optional = false)
     @JoinColumn(name = "id_form_version", referencedColumnName = "id")
     @JsonIgnore
     private PublicationFormVersion formVersion;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_form_parent", referencedColumnName = "id")
+    @Where(clause = "id_form_parent IS NULL")
+    @JsonIgnore
+    private PublicationForm parent;
+
+    @OneToMany(mappedBy = "parent", fetch = FetchType.EAGER)
+    @Where(clause = "id_form_parent IS NOT NULL")
+    @JsonManagedReference
+    private Collection<PublicationForm> children;
 
     public PublicationForm() {
     }
@@ -436,6 +452,14 @@ public class PublicationForm implements Serializable {
 
     public void setFormVersion(PublicationFormVersion formVersion) {
         this.formVersion = formVersion;
+    }
+
+    public Collection<PublicationForm> getChildren() {
+        return children;
+    }
+
+    public void setChildren(Collection<PublicationForm> children) {
+        this.children = children;
     }
 
     @Override

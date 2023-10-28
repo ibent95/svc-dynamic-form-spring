@@ -24,6 +24,7 @@ import svc.dynamic.form.project.Component.ResponseIterableComponent;
 import svc.dynamic.form.project.Component.ResponseListComponent;
 import svc.dynamic.form.project.Component.ResponseObjectComponent;
 import svc.dynamic.form.project.Entity.Publication;
+import svc.dynamic.form.project.Entity.PublicationForm;
 import svc.dynamic.form.project.Entity.PublicationFormVersion;
 import svc.dynamic.form.project.Entity.PublicationType;
 import svc.dynamic.form.project.Repository.PublicationRepository;
@@ -264,5 +265,34 @@ public class PublicationQueryController {
 
         return ResponseEntity.status(this.responseHashMap.status).body(this.responseHashMap);
     }
+
+    // ============================= Experimental ============================= 
+
+    @RequestMapping(value = "experimental/publications/form-meta-data/{publicationTypeCode}", method = RequestMethod.GET)
+    public ResponseEntity<ResponseIterableComponent> getExperimentalFormMetaDataByPublicationTypeCode(@PathVariable String publicationTypeCode)  {
+
+        try {
+            PublicationType publicationType                 = this.publicationTypeRepo.findByPublicationTypeCode(publicationTypeCode);
+            
+            // FormVersion
+            Collection<PublicationFormVersion> formVersions = publicationType.getPublicationFormVersionCollection();
+            PublicationFormVersion formVersion              = this.publicationSvc.getActiveFormVersionData(formVersions);
+            Iterable<PublicationForm> formsCollection       = formVersion.getPublicationFormCollection();
+
+            this.responseIterable.data    = formsCollection;
+            this.responseIterable.status  = 200;
+            this.responseIterable.info    = "success";
+            this.responseIterable.message = "Success on get experimental form metadata data by Publication Type Code: " + publicationTypeCode + ".";
+            this.commonSvc.setLogger(INFO, this.responseIterable.message);
+        } catch (Exception e) {
+            this.responseIterable.status  = 400;
+            this.responseIterable.info    = "error";
+            this.responseIterable.message = "Error on get experimental form metadata data by Publication Type Code: " + publicationTypeCode + ".";
+            this.commonSvc.setLogger(ERROR, this.responseIterable.message, e);
+        }
+
+        return ResponseEntity.status(this.responseIterable.status).body(this.responseIterable);
+    }
+
 
 }

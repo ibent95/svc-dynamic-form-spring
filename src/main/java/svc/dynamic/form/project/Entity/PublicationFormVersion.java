@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.HashMap;
 
 import org.hibernate.annotations.Type;
+import org.hibernate.annotations.Where;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -118,6 +119,7 @@ public class PublicationFormVersion implements Serializable {
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "formVersion", fetch = FetchType.EAGER)
     @OrderBy("order_position ASC")
+	@Where(clause = "id_form_parent IS NULL")
 	@JsonIgnore
 	@JsonManagedReference
 	private Collection<PublicationForm> publicationFormCollection;
