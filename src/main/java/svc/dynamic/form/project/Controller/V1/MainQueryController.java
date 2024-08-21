@@ -72,7 +72,7 @@ public class MainQueryController {
 	}
 
 	@RequestMapping(value = "files/{serviceName}/{fileNameExtension}", method = RequestMethod.GET)
-	public ResponseEntity<Resource> ngetUploadedFile(
+	public ResponseEntity<Resource> getUploadedFile(
         @PathVariable String serviceName,
         @PathVariable String fileNameExtension,
 		HttpServletRequest request
